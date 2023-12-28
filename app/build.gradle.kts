@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.deskpro.messengersdkandroid"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.deskpro.messengersdkandroid"
