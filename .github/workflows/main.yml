@@ -1,0 +1,31 @@
+name: Messenger SDK Android CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: 17
+    - name: Change wrapper permissions
+      run: chmod +x ./gradlew
+    - name: Gradle Build and Test
+      uses: eskatos/gradle-command-action@v1.3.3
+      with:
+        wrapper-cache-enabled: true
+        dependencies-cache-enabled: true
+        configuration-cache-enabled: true
+        arguments: clean assembleDebug testDebugUnitTest --info --stacktrace
