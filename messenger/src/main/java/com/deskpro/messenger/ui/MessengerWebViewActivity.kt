@@ -1,78 +1,89 @@
 package com.deskpro.messenger.ui
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
+import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import com.deskpro.messenger.databinding.ActivityMessengerWebViewBinding
+import com.deskpro.messenger.util.Constants.WEB_INTERFACE_KEY
+import com.deskpro.messenger.util.extensions.EvaluateScriptsUtil.initAndOpenScript
 import com.deskpro.messenger.util.extensions.extractUrl
-import com.deskpro.messenger.util.extensions.initScript
-import com.deskpro.messenger.util.extensions.openScript
-import kotlinx.coroutines.runBlocking
 
 internal class MessengerWebViewActivity : AppCompatActivity() {
 
-    private lateinit var webView: WebView
+    private lateinit var binding: ActivityMessengerWebViewBinding
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMessengerWebViewBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        webView = WebView(this)
-        webView.settings.domStorageEnabled = true
-        webView.settings.javaScriptEnabled = true
+        with(binding.webView) {
+            settings.domStorageEnabled = true
+            settings.javaScriptEnabled = true
 
-        webView.webChromeClient = object : WebChromeClient() {}
+            webChromeClient = object : WebChromeClient() {}
 
-        /**
-         * Add javascript interface for JS communication with crucial key - androidApp
-         */
-        webView.addJavascriptInterface(MessengerWebInterface(this), "androidApp")
+            /**
+             * Add javascript interface for JS communication with crucial key - androidApp
+             */
+            addJavascriptInterface(
+                MessengerWebInterface(this@MessengerWebViewActivity),
+                WEB_INTERFACE_KEY
+            )
 
-        webView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                request: WebResourceRequest?
-            ): Boolean {
-                Uri.parse(request?.url.toString())
-                return false
-            }
-
-            override fun onReceivedError(
-                view: WebView?,
-                request: WebResourceRequest?,
-                error: WebResourceError?
-            ) {
-                super.onReceivedError(view, request, error)
-            }
-
-            override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
-
-                /**
-                 * This will be refactored on JS, there will be only one script
-                 */
-                runBlocking {
-                    view?.evaluateJavascript(initScript(), null)
+            webViewClient = object : WebViewClient() {
+                override fun shouldOverrideUrlLoading(
+                    view: WebView?,
+                    request: WebResourceRequest?
+                ): Boolean {
+                    Uri.parse(request?.url.toString())
+                    return false
                 }
 
-                val handler = Handler()
-                handler.postDelayed({
-                    view?.evaluateJavascript(openScript(), null)
-                }, 500)
+                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                    super.onPageStarted(view, url, favicon)
+                    binding.progressBar.visibility = View.VISIBLE
+                    view?.evaluateJavascript(initAndOpenScript(), null)
+                }
+
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    binding.progressBar.visibility = View.GONE
+                }
+
+                override fun onReceivedError(
+                    view: WebView?,
+                    request: WebResourceRequest?,
+                    error: WebResourceError?
+                ) {
+                    super.onReceivedError(view, request, error)
+                }
             }
         }
 
-        setContentView(webView)
-
         val url = extractUrl(intent)
-        url.let { webView.loadUrl(url) }
+        url.let { binding.webView.loadUrl(url) }
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        binding.webView.saveState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        binding.webView.restoreState(savedInstanceState)
+    }
+
 
     override fun onBackPressed() {
         super.onBackPressed()
