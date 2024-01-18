@@ -12,6 +12,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.deskpro.messenger.databinding.ActivityMessengerWebViewBinding
+import com.deskpro.messenger.util.Constants.ERROR_PAGE_PATH
 import com.deskpro.messenger.util.Constants.WEB_INTERFACE_KEY
 import com.deskpro.messenger.util.extensions.EvaluateScriptsUtil.initAndOpenScript
 import com.deskpro.messenger.util.extensions.extractUrl
@@ -26,6 +27,8 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
         binding = ActivityMessengerWebViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val url = extractUrl(intent)
+
         with(binding.webView) {
             settings.domStorageEnabled = true
             settings.javaScriptEnabled = true
@@ -36,7 +39,7 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
              * Add javascript interface for JS communication with crucial key - androidApp
              */
             addJavascriptInterface(
-                MessengerWebInterface(this@MessengerWebViewActivity),
+                MessengerWebInterface(this@MessengerWebViewActivity, binding.webView, url),
                 WEB_INTERFACE_KEY
             )
 
@@ -66,11 +69,12 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
                     error: WebResourceError?
                 ) {
                     super.onReceivedError(view, request, error)
+                    binding.progressBar.visibility = View.GONE
+                    loadErrorHtmlPage()
                 }
             }
         }
 
-        val url = extractUrl(intent)
         url.let { binding.webView.loadUrl(url) }
     }
 
@@ -88,5 +92,9 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         this.finish()
+    }
+
+    private fun loadErrorHtmlPage() {
+        binding.webView.loadUrl(ERROR_PAGE_PATH)
     }
 }
