@@ -146,7 +146,6 @@ internal interface Messenger {
     fun enableLogging(): Unit
 }
 
-class User
 class PushNotificationData
 class DeskProError
 
