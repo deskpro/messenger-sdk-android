@@ -11,35 +11,44 @@ import com.deskpro.messenger.data.User
 import com.deskpro.messenger.util.Prefs
 
 class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
+
+    private var prefs: Prefs? = null
+
     override fun initialize(context: Context) {
         App.appContext = context
-        App.prefs = Prefs(context, messengerConfig.appId)
+        prefs = Prefs(context, messengerConfig.appId)
         Log.d(TAG, "Initialized")
+
+        prefs?.setUserInfo(User("John", "Doe", " "))
     }
 
     override fun test(): String {
         return "Hello world from Messenger!"
     }
 
-    override fun loginUser(user: User, deskProCallback: DeskProStatusCallback) {
+    override fun setUserInfo(user: User, deskProCallback: DeskProStatusCallback?) {
         //TODO Not yet implemented
-        App.prefs?.setUserInfo(user)
+        prefs?.setUserInfo(user)
     }
 
     override fun updateUser(user: User, deskProCallback: DeskProStatusCallback) {
         //TODO Not yet implemented
-        App.prefs?.setUserInfo(user)
+        prefs?.setUserInfo(user)
     }
 
-    override fun logout(): Boolean {
+    override fun forgetUser(): Boolean {
         //TODO Not yet implemented
-        App.prefs?.clear()
+        prefs?.clear()
         return true
     }
 
-    override fun setPushRegistrationToken(deviceToken: String): Boolean {
+    override fun authorizeUser(userJwt: String) {
         //TODO Not yet implemented
-        App.prefs?.setJwtToken(deviceToken)
+        prefs?.setJwtToken(userJwt)
+    }
+
+    override fun setPushRegistrationToken(token: String): Boolean {
+        //TODO Not yet implemented
         return true
     }
 
@@ -56,12 +65,12 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
         val url = with(messengerConfig) {
             this.appUrl.plus(this.appId)
         }
-        return PresentBuilder(url)
+        return PresentBuilder(url, prefs?.getJwtToken() ?: "")
     }
 
     override fun close() {
         //TODO Not yet implemented
-        App.prefs?.clear()
+        Log.d(TAG, prefs?.getUserInfo()?.name ?: "")
     }
 
     override fun getUnreadConversationCount(): Int {

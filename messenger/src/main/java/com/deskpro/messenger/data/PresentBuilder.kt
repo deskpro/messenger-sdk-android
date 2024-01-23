@@ -1,11 +1,10 @@
 package com.deskpro.messenger.data
 
-import android.content.Intent
+import android.util.Log
 import com.deskpro.messenger.App
 import com.deskpro.messenger.ui.MessengerWebViewActivity
-import com.deskpro.messenger.util.Constants
 
-class PresentBuilder(url: String) {
+class PresentBuilder(url: String, private val appId: String) {
     private var path = StringBuilder().append(url)
 
     fun chatHistory(chatId: Int): PresentBuilder {
@@ -24,10 +23,12 @@ class PresentBuilder(url: String) {
     }
 
     fun show() {
-        App.appContext?.startActivity(
-            Intent(App.appContext, MessengerWebViewActivity::class.java)
-                .putExtra(Constants.WEB_URL, path.toString())
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        )
+        if (App.appContext == null) {
+            Log.d("PresentBuilder", "Context is null")
+            return
+        }
+        App.appContext?.let {
+            MessengerWebViewActivity.start(context = it, path = path.toString(), appId = appId)
+        }
     }
 }

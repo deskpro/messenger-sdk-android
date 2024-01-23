@@ -8,6 +8,5 @@ internal class App : Application() {
 
     companion object {
         var appContext: Context? = null
-        var prefs: Prefs? = null
     }
 }
