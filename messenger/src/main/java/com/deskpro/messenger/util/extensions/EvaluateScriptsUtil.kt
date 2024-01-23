@@ -1,6 +1,5 @@
 package com.deskpro.messenger.util.extensions
 
-import com.deskpro.messenger.util.Constants.APP_ID
 import com.deskpro.messenger.util.Constants.WEB_INTERFACE_KEY
 
 internal object EvaluateScriptsUtil {
@@ -9,7 +8,7 @@ internal object EvaluateScriptsUtil {
         window.DESKPRO_MESSENGER_CONNECTION = {
           parentMethods: {
             ready: async () => {
-              const data = await window.DESKPRO_MESSENGER_CONNECTION.childMethods?.init("$APP_ID", {
+              const data = await window.DESKPRO_MESSENGER_CONNECTION.childMethods?.init("1", {
                 showLauncherButton: false,
                 user: window.DESKPRO_MESSENGER_OPTIONS?.userInfo,
                 launcherButtonConfig: undefined,
@@ -41,47 +40,70 @@ internal object EvaluateScriptsUtil {
 
     fun openScript(): String {
         return """
-        window.DESKPRO_MESSENGER_CONNECTION.childMethods.open("$APP_ID", {
+        window.DESKPRO_MESSENGER_CONNECTION.childMethods.open("1", {
           parentViewHeight: 'fullscreen',
           showLauncherButton: false,
         });
     """
     }
 
-    fun initAndOpenScript(): String {
+    private fun optionsScript(): String {
         return """
- window.DESKPRO_MESSENGER_CONNECTION = {
-   parentMethods: {
-     ready: async () => {
-       const data = await window.DESKPRO_MESSENGER_CONNECTION.childMethods?.init('$APP_ID', {
-         showLauncherButton: false,
-         user: window.DESKPRO_MESSENGER_OPTIONS?.userInfo,
-         launcherButtonConfig: undefined, // Optional,
-         messengerAppConfig: undefined,
-         parentViewHeight: "fullscreen",
-         open: true
-       });
+        window.DESKPRO_MESSENGER_OPTIONS = {
+            showLauncherButton: false,
+            openOnInit: true,
+            userInfo: { name: "john" },
+            signedUserInfo: undefined,
+            launcherButtonConfig: undefined,
+            messengerAppConfig: undefined,
+            urlCacheableConfig: undefined,
+          };
+        """
+    }
 
-       if (data) {
-         const { side, offsetBottom, offsetSide, width, height } = data;
-         // setViewportPosition({ side, offsetBottom, offsetSide });
-         // setViewportSize({ width, height });
-       }
-     },
-     open: async () => {
-       // setViewportSize({ width, height });
-     },
-     close: async () => {
-        $WEB_INTERFACE_KEY.close();
-        //alert('close.') //triggers `runJavaScriptAlertPanelWithMessage`
-     },
-     getViewHeight: async () => {
-        return 'fullscreen'
-     },
-   },
-     // This object will be assigned by the messenger app on ready, so you can call the childMethods from the parent.
-   childMethods: undefined,
- };
-"""
+    private fun connectionScript(): String {
+        return """ 
+        window.DESKPRO_MESSENGER_CONNECTION = {
+           parentMethods: {
+            ready: async (messengerId) => {
+             const data = await window.DESKPRO_MESSENGER_CONNECTION.childMethods?.init(messengerId, {
+              showLauncherButton: DESKPRO_MESSENGER_OPTIONS.showLauncherButton,
+              user: window.DESKPRO_MESSENGER_OPTIONS?.userInfo,
+              launcherButtonConfig: DESKPRO_MESSENGER_OPTIONS.launcherButtonConfig,
+              messengerAppConfig: DESKPRO_MESSENGER_OPTIONS.messengerAppConfig,
+              parentViewHeight: "fullscreen",
+              open: DESKPRO_MESSENGER_OPTIONS.openOnInit,
+             });
+        
+             if (data) {
+              const { side, offsetBottom, offsetSide, width, height } = data;
+             }
+            },
+            getViewHeight: async (messengerId) => {
+             return "fullscreen";
+            },
+            getUserInfo: async (messengerId) => {
+              return $WEB_INTERFACE_KEY.getUserInfo();
+            },
+            getUserJwtToken: async (messengerId) => {
+              return $WEB_INTERFACE_KEY.getJwtToken();
+            },
+            open: async (messengerId, data) => {
+              const { width, height } = data;
+            },
+            close: async (messengerId, data) => {
+              $WEB_INTERFACE_KEY.close();
+            },
+            appEvent: async (messengerId, event) => {
+                alert(event.id);
+            },
+           },
+           childMethods: undefined,
+          };
+        """
+    }
+
+    fun initAndOpenScript(): String {
+        return optionsScript() + connectionScript()
     }
 }
