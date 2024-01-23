@@ -1,6 +1,8 @@
 package com.deskpro.messenger.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -12,14 +14,19 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.deskpro.messenger.databinding.ActivityMessengerWebViewBinding
+import com.deskpro.messenger.util.Constants
 import com.deskpro.messenger.util.Constants.ERROR_PAGE_PATH
 import com.deskpro.messenger.util.Constants.WEB_INTERFACE_KEY
+import com.deskpro.messenger.util.Prefs
 import com.deskpro.messenger.util.extensions.EvaluateScriptsUtil.initAndOpenScript
+import com.deskpro.messenger.util.extensions.extractAppId
 import com.deskpro.messenger.util.extensions.extractUrl
 
 internal class MessengerWebViewActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMessengerWebViewBinding
+
+    private var prefs: Prefs? = null
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +35,8 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val url = extractUrl(intent)
+        val appId = extractAppId(intent)
+        prefs = Prefs(this, appId)
 
         with(binding.webView) {
             settings.domStorageEnabled = true
@@ -39,7 +48,13 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
              * Add javascript interface for JS communication with crucial key - androidApp
              */
             addJavascriptInterface(
-                MessengerWebInterface(this@MessengerWebViewActivity, binding.webView, url),
+                MessengerWebInterface(
+                    context = this@MessengerWebViewActivity,
+                    webView = binding.webView,
+                    url = url,
+                    jtwToken = prefs?.getJwtToken() ?: "",
+                    userJson = prefs?.getUserInfoJson() ?: ""
+                ),
                 WEB_INTERFACE_KEY
             )
 
@@ -88,7 +103,6 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
         binding.webView.restoreState(savedInstanceState)
     }
 
-
     override fun onBackPressed() {
         super.onBackPressed()
         this.finish()
@@ -96,5 +110,15 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
 
     private fun loadErrorHtmlPage() {
         binding.webView.loadUrl(ERROR_PAGE_PATH)
+    }
+
+    companion object {
+        fun start(context: Context, path: String, appId: String) {
+            val intent = Intent(context, MessengerWebViewActivity::class.java)
+                .putExtra(Constants.WEB_URL, path)
+                .putExtra(Constants.APP_ID, appId)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }
     }
 }

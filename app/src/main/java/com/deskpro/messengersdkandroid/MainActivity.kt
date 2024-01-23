@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var messenger: DeskPro
     private val messengerConfig =
-        MessengerConfig("https://dev-pr-12730.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d", "")
+        MessengerConfig("https://dev-pr-12776.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d", "")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
