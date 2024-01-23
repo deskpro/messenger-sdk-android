@@ -18,8 +18,6 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
         App.appContext = context
         prefs = Prefs(context, messengerConfig.appId)
         Log.d(TAG, "Initialized")
-
-        prefs?.setUserInfo(User("John", "Doe", " "))
     }
 
     override fun test(): String {
