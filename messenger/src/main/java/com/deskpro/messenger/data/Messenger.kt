@@ -10,7 +10,6 @@ internal interface Messenger {
      * necessary configurations and prepare for the execution of other features.
      *
      * @param context The application context to be used for initialization.
-     * @throws Exception If an error occurs during initialization.
      */
     fun initialize(context: Context): Unit
 
@@ -25,46 +24,22 @@ internal interface Messenger {
     fun test(): String
 
     /**
-     * Logs in a user and notifies the provided callback of the login status.
+     * Sets user information for the application.
      *
-     * This method attempts to log in the specified user and invokes the callback to
-     * communicate the login result.
+     * This function updates or initializes the user information for the application.
+     * Call this method when the user logs in or when user details need to be refreshed.
      *
-     * @param user The user to be logged in.
-     * @param deskProCallback The callback to receive the login status.
-     *   - If the login is successful, [DeskProStatusCallback.onSuccess] will be called.
-     *   - If the login fails, [DeskProStatusCallback.onFailure] will be called with the
-     *     appropriate error message.
-     * @see User
-     * @see DeskProStatusCallback
+     * @param user The [User] object containing the user information.
      */
-    fun setUserInfo(user: User, deskProCallback: DeskProStatusCallback?)
+    fun setUserInfo(user: User): Unit
 
     /**
-     * Updates user information and notifies the provided callback of the update status.
+     * Sets a user JWT token that enables Messenger to treat this user as a logged-in user.
      *
-     * This method attempts to update the information of the specified user and invokes the
-     * callback to communicate the update result.
-     *
-     * @param user The user with updated information.
-     * @param deskProCallback The callback to receive the update status.
-     *   - If the update is successful, [DeskProStatusCallback.onSuccess] will be called.
-     *   - If the update fails, [DeskProStatusCallback.onFailure] will be called with the
-     *     appropriate error message.
-     * @see User
-     * @see DeskProStatusCallback
+     * @param userJwt The JSON Web Token (JWT) representing the user's authentication.
+     * @return `true` if the token is successfully saved, `false` otherwise.
      */
-    fun updateUser(user: User, deskProCallback: DeskProStatusCallback)
-
-    /**
-     * Authorizes the current user with the provided JWT token.
-     *
-     * This method associates the provided JWT token with the current user, enabling the SDK to
-     * perform operations on behalf of the user.
-     *
-     * @param userJwt The JWT token obtained from the server.
-     */
-    fun authorizeUser(userJwt: String)
+    fun authorizeUser(userJwt: String): Boolean
 
     /**
      * Logs out the current user from the SDK session.
@@ -108,7 +83,6 @@ internal interface Messenger {
      * If the push notification is not related to DeskPro, it is advisable to handle it appropriately.
      *
      * @param pushNotification The push notification data to be handled.
-     * @throws PushNotificationHandlingException If an error occurs while handling the DeskPro push notification.
      * @see isDeskProPushNotification
      */
     fun handlePushNotification(pushNotification: PushNotificationData): Unit
@@ -154,12 +128,4 @@ internal interface Messenger {
      * logged for debugging and troubleshooting purposes.
      */
     fun enableLogging(): Unit
-}
-
-class PushNotificationData
-class DeskProError
-
-interface DeskProStatusCallback {
-    fun onFailure(deskProError: DeskProError)
-    fun onSuccess()
 }
