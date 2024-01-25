@@ -7,12 +7,18 @@ import com.deskpro.messenger.DeskPro
 import com.deskpro.messenger.data.MessengerConfig
 import com.deskpro.messengersdkandroid.databinding.ActivityMainBinding
 
+/**
+ * Main activity hosting the DeskPro Messenger integration demonstration.
+ *
+ * The `MainActivity` class demonstrates the integration of DeskPro Messenger into an Android application.
+ * It initializes the DeskPro Messenger instance, handles button clicks, and showcases basic functionality.
+ */
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var messenger: DeskPro
     private val messengerConfig =
-        MessengerConfig("https://dev-pr-12776.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d", "")
+        MessengerConfig("https://dev-pr-12730.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d", "")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

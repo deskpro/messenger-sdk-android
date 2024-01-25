@@ -22,12 +22,28 @@ import com.deskpro.messenger.util.extensions.EvaluateScriptsUtil.initAndOpenScri
 import com.deskpro.messenger.util.extensions.extractAppId
 import com.deskpro.messenger.util.extensions.extractUrl
 
+/**
+ * Activity hosting the WebView for DeskPro Messenger functionality.
+ *
+ * The `MessengerWebViewActivity` class manages the WebView, handles WebView configuration, and sets up
+ * communication with JavaScript through the [MessengerWebInterface]. It also handles WebView lifecycle events
+ * and error handling.
+ */
 internal class MessengerWebViewActivity : AppCompatActivity() {
 
+    /**
+     * View binding instance for the activity layout.
+     */
     private lateinit var binding: ActivityMessengerWebViewBinding
 
+    /**
+     * SharedPreferences utility for managing user information and JWT tokens.
+     */
     private var prefs: Prefs? = null
 
+    /**
+     * Handles the creation of the activity.
+     */
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,9 +60,7 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
 
             webChromeClient = object : WebChromeClient() {}
 
-            /**
-             * Add javascript interface for JS communication with crucial key - androidApp
-             */
+            // Add JavaScript interface for JS communication with the crucial key - androidApp
             addJavascriptInterface(
                 MessengerWebInterface(
                     context = this@MessengerWebViewActivity,
@@ -93,26 +107,48 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
         url.let { binding.webView.loadUrl(url) }
     }
 
+    /**
+     * Handles saving the WebView state when the activity is paused.
+     */
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         binding.webView.saveState(outState)
     }
 
+    /**
+     * Handles restoring the WebView state when the activity is resumed.
+     */
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         binding.webView.restoreState(savedInstanceState)
     }
 
+    /**
+     * Handles the back button press to finish the activity.
+     */
     override fun onBackPressed() {
         super.onBackPressed()
         this.finish()
     }
 
+    /**
+     * Loads the error HTML page in the WebView when an error occurs.
+     */
     private fun loadErrorHtmlPage() {
         binding.webView.loadUrl(ERROR_PAGE_PATH)
     }
 
+    /**
+     * Companion object providing a convenient method to start the [MessengerWebViewActivity].
+     */
     companion object {
+        /**
+         * Starts the [MessengerWebViewActivity] with the specified parameters.
+         *
+         * @param context The context from which the activity is started.
+         * @param path The web URL path to load in the WebView.
+         * @param appId The application ID associated with the DeskPro Messenger module.
+         */
         fun start(context: Context, path: String, appId: String) {
             val intent = Intent(context, MessengerWebViewActivity::class.java)
                 .putExtra(Constants.WEB_URL, path)

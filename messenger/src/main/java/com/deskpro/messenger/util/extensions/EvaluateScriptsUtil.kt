@@ -2,6 +2,12 @@ package com.deskpro.messenger.util.extensions
 
 import com.deskpro.messenger.util.Constants.WEB_INTERFACE_KEY
 
+/**
+ * Utility object containing scripts for initializing and interacting with the DeskPro Messenger WebView.
+ *
+ * The `EvaluateScriptsUtil` object provides JavaScript scripts for initializing the Messenger connection,
+ * opening the Messenger, and handling various events.
+ */
 internal object EvaluateScriptsUtil {
     fun initScript(): String {
         return """
@@ -95,7 +101,6 @@ internal object EvaluateScriptsUtil {
               $WEB_INTERFACE_KEY.close();
             },
             appEvent: async (messengerId, event) => {
-                alert(event.id);
             },
            },
            childMethods: undefined,
