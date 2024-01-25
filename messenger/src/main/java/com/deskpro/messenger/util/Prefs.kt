@@ -78,42 +78,38 @@ internal class Prefs(context: Context, appId: String) {
 
     /**
      * Sets the user information in SharedPreferences.
+     *
      * If the user is null, removes the user information from SharedPreferences.
      *
      * @param user The [User] object representing user information, or null.
-     * @param onSuccess Callback invoked with the success status after the operation.
      * @see User
      */
-    fun setUserInfo(user: User?, onSuccess: ((Boolean) -> Unit)? = null) {
+    fun setUserInfo(user: User?) {
         if (user == null) {
             prefs.edit().remove(USER_INFO).apply()
-            onSuccess?.invoke(false)
             return
         }
         val editor = prefs.edit()
         val jsonString = json.encodeToString(user)
         editor.putString(USER_INFO, jsonString)
         editor.apply()
-        onSuccess?.invoke(true)
     }
 
     /**
      * Sets the JWT token in SharedPreferences.
+     *
      * If the token is null, removes the token from SharedPreferences.
      *
      * @param token The JWT token, or null.
-     * @param onSuccess Callback invoked with the success status after the operation.
      */
-    fun setJwtToken(token: String?, onSuccess: ((Boolean) -> Unit)? = null) {
+    fun setJwtToken(token: String?) {
         if (token == null) {
             prefs.edit().remove(JWT_TOKEN).apply()
-            onSuccess?.invoke(false)
             return
         }
         val editor = prefs.edit()
         editor.putString(JWT_TOKEN, token)
         editor.apply()
-        onSuccess?.invoke(true)
     }
 
     /**
