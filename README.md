@@ -1,7 +1,14 @@
+<img align="right" alt="Deskpro" src="https://raw.githubusercontent.com/DeskproApps/bitrix24/master/docs/assets/deskpro-logo.svg" />
+
 # DeskPro Android Messenger
 ![Messenger SDK Android CI](https://github.com/deskpro/messenger-sdk-android/workflows/Messenger%20SDK%20Android%20CI/badge.svg)
 
 DeskPro Android Messenger is a Chat/AI/Messaging product. You can embed a “widget” directly into native app, so that enables end-users to use the product. Similar implementation for [iOS](https://github.com/deskpro/messenger-sdk-ios).
+
+## Requirements
+
+- minSDK 23
+- View binding enabled
 
 ## Getting Started
 
@@ -10,6 +17,43 @@ You need an IDE with good Gradle and Kotlin integration to work with this projec
 From that point, you can just open the project in the IDE and you should be set to go.
 
 For a general tutorial on creating Android library/SDK, [take a look here](https://developer.android.com/studio/projects/android-library).
+
+## Installation
+
+- Copy the .aar file into the `libs` folder of your Android project. If there's no libs folder, you can create one in the app module.
+- Open the build.gradle file for the app module and add the following lines:
+
+```
+android {
+    ...
+    buildFeatures {
+        viewBinding = true
+    }
+}
+
+dependencies {
+    ...
+    implementation(files("libs/library-file-name.aar")
+}
+```
+
+## Initialization
+
+```
+val messengerConfig =
+    MessengerConfig(appUrl: "YOUR_APP_URL", appId: "YOUR_APP_ID")
+```
+Replace `YOUR_APP_URL` and `YOUR_APP_ID` with your app's URL and ID.
+```
+val messenger = DeskPro(messengerConfig)
+
+messenger.initialize(applicationContext)
+```
+To open a Messenger, paste this line example in the desired place:
+```
+messenger.present().show()
+```
+Note: You can create multiple Messenger instances.
 
 ## Running the tests
 
