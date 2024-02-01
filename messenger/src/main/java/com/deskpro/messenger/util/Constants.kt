@@ -19,6 +19,11 @@ internal object Constants {
     const val APP_ID = "app_id"
 
     /**
+     * Key for passing the app icon resource ID through Intent extras.
+     */
+    const val APP_ICON = "app_icon"
+
+    /**
      * Key representing the Android web interface in JavaScript.
      */
     const val WEB_INTERFACE_KEY = "androidApp"

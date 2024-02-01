@@ -12,8 +12,9 @@ import com.deskpro.messenger.ui.MessengerWebViewActivity
  *
  * @param url The base URL for constructing the path.
  * @param appId The application ID used for presentation.
+ * @param appIcon The resourceID used for the notification.
  */
-class PresentBuilder(url: String, private val appId: String) {
+class PresentBuilder(url: String, private val appId: String, private val appIcon: Int = -1) {
     /**
      * Represents the constructed path for the URL.
      */
@@ -63,7 +64,7 @@ class PresentBuilder(url: String, private val appId: String) {
             return
         }
         App.appContext?.let {
-            MessengerWebViewActivity.start(context = it, path = path.toString(), appId = appId)
+            MessengerWebViewActivity.start(context = it, path = path.toString(), appId = appId, appIcon = appIcon)
         }
     }
 }

@@ -98,7 +98,7 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
      * @return `true` if the push registration token is successfully set; `false` otherwise.
      */
     override fun setPushRegistrationToken(token: String): Boolean {
-        //TODO Not yet implemented
+        prefs?.setFCMToken(token)
         return true
     }
 
@@ -151,7 +151,7 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
         val url = with(messengerConfig) {
             this.appUrl.plus(this.appId)
         }
-        return PresentBuilder(url, messengerConfig.appId)
+        return PresentBuilder(url, messengerConfig.appId, messengerConfig.appIcon)
     }
 
     /**

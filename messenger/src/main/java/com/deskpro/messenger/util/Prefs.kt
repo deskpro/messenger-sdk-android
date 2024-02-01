@@ -34,6 +34,8 @@ internal class Prefs(context: Context, appId: String) {
      */
     private val JWT_TOKEN = "jwt_token"
 
+    private val FCM_TOKEN = "fcm_token"
+
     /**
      * Lazy-initialized SharedPreferences instance.
      */
@@ -119,6 +121,32 @@ internal class Prefs(context: Context, appId: String) {
      */
     fun getJwtToken(): String? {
         return prefs.getString(JWT_TOKEN, null)
+    }
+
+    /**
+     * Sets the FCM token in SharedPreferences.
+     *
+     * If the token is null, removes the token from SharedPreferences.
+     *
+     * @param token The FCM token, or null.
+     */
+    fun setFCMToken(token: String?) {
+        if (token == null) {
+            prefs.edit().remove(FCM_TOKEN).apply()
+            return
+        }
+        val editor = prefs.edit()
+        editor.putString(FCM_TOKEN, token)
+        editor.apply()
+    }
+
+    /**
+     * Retrieves the FCM token from SharedPreferences.
+     *
+     * @return The FCM token, or null if not present.
+     */
+    fun getFCMToken(): String? {
+        return prefs.getString(FCM_TOKEN, null)
     }
 
     /**
