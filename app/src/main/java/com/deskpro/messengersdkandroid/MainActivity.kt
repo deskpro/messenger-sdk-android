@@ -5,6 +5,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.deskpro.messenger.DeskPro
 import com.deskpro.messenger.data.MessengerConfig
+import com.deskpro.messenger.data.PushNotificationData
+import com.deskpro.messenger.data.User
 import com.deskpro.messengersdkandroid.databinding.ActivityMainBinding
 
 /**
@@ -16,9 +18,16 @@ import com.deskpro.messengersdkandroid.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var messenger: DeskPro
-    private val messengerConfig =
-        MessengerConfig("https://dev-pr-12730.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d", "")
+    private var messenger: DeskPro? = null
+    private var appUrl = "https://dev-pr-12730.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d"
+    private var jwtToken = ""
+    private var user: User? = null
+    private var userInfo = "{\n" +
+            "  \"name\": \"John Doe\",\n" +
+            "  \"first_name\": \"John\",\n" +
+            "  \"last_name\": \"Doe\",\n" +
+            "  \"email\": \"john.doe@mail.com\"\n" +
+            "}"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,41 +35,62 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val view = binding.root
         setContentView(view)
 
-        /**
-         * New messanger instance creation
-         */
-        messenger = DeskPro(messengerConfig)
-
-        messenger.initialize(applicationContext)
-
         initListeners()
+
+        binding.etUrl.setText(appUrl)
+        binding.etUserInfo.setText(userInfo)
     }
 
     override fun onClick(v: View?) {
         binding.apply {
             when (v) {
-                btnTest -> {
-                    onTestPressed()
+                btnUrl -> {
+                    appUrl = etUrl.text.toString()
+                }
+
+                btnJWT -> {
+                    jwtToken = etJWT.text.toString()
+                    messenger?.authorizeUser(jwtToken)
+                }
+
+                btnUserInfo -> {
+                    userInfo = etUserInfo.text.toString()
+                    //TODO: parse userInfo string and set user info
+                    user = User()
+                }
+
+                btnNotifications -> {
+                    //TODO check for permission
+                    //messenger?.handlePushNotification(PushNotificationData())
                 }
 
                 btnOpenMessenger -> {
-                    onOpenMessengerPressed()
+                    messenger = DeskPro(MessengerConfig(appUrl = appUrl, ""))
+                    messenger?.initialize(applicationContext)
+                    messenger?.present()?.show()
+                    user?.let {
+                        messenger?.setUserInfo(it)
+                    }
+                }
+
+                btnOpenMessengerNewChat -> {
+                    messenger = DeskPro(MessengerConfig(appUrl = appUrl, ""))
+                    messenger?.initialize(applicationContext)
+                    messenger?.present()?.show()
+                    user?.let {
+                        messenger?.setUserInfo(it)
+                    }
                 }
             }
         }
     }
 
     private fun initListeners() {
-        binding.btnTest.setOnClickListener(this)
+        binding.btnUrl.setOnClickListener(this)
+        binding.btnJWT.setOnClickListener(this)
+        binding.btnUserInfo.setOnClickListener(this)
+        binding.btnNotifications.setOnClickListener(this)
         binding.btnOpenMessenger.setOnClickListener(this)
-    }
-
-    private fun onTestPressed() {
-        val result = messenger.test()
-        binding.tvMessage.text = result
-    }
-
-    private fun onOpenMessengerPressed() {
-        messenger.present().show()
+        binding.btnOpenMessengerNewChat.setOnClickListener(this)
     }
 }
