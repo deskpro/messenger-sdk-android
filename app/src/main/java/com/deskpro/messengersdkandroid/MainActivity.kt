@@ -1,6 +1,7 @@
 package com.deskpro.messengersdkandroid
 
 import android.Manifest
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -17,6 +18,7 @@ import com.deskpro.messenger.DeskPro
 import com.deskpro.messenger.data.MessengerConfig
 import com.deskpro.messenger.data.User
 import com.deskpro.messengersdkandroid.databinding.ActivityMainBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
@@ -63,7 +65,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         binding.etUrl.setText(appUrl)
         binding.etUserInfo.setText(userInfo)
-        binding.tvEvents.movementMethod = ScrollingMovementMethod()
+        binding.tvLogs.movementMethod = ScrollingMovementMethod()
 
         lifecycleScope.launch(Dispatchers.IO) {
             Runtime.getRuntime().exec("logcat -c") // Clear logs
@@ -85,7 +87,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             stringBuilder.insert(0, "<font color='purple'>$newLine</font><br>")
                         }
                         withContext(Dispatchers.Main) {
-                            binding.tvEvents.text = HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY)
+                            binding.tvLogs.text = HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY)
                         }
                     }
                 }
@@ -131,8 +133,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     startDeskPro()
                 }
 
-                btnOpenMessengerNewChat -> {
-                    startDeskPro()
+                btnEvents -> {
+                    MaterialAlertDialogBuilder(this@MainActivity)
+                        .setTitle("Messenger app events")
+                        .setMessage(messenger?.getLogs()?.joinToString("\n\n"))
+                        .setPositiveButton(
+                            "OK"
+                        ) { _: DialogInterface?, _: Int -> }
+                        .show()
                 }
             }
         }
@@ -141,13 +149,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun initListeners() {
         binding.btnNotifications.setOnClickListener(this)
         binding.btnOpenMessenger.setOnClickListener(this)
-        binding.btnOpenMessengerNewChat.setOnClickListener(this)
+        binding.btnEvents.setOnClickListener(this)
     }
 
     private fun startDeskPro() {
         messenger = DeskPro(MessengerConfig(appUrl = appUrl, appId = appId))
         messenger?.initialize(applicationContext)
-
+        messenger?.enableLogging()
         messenger?.authorizeUser(jwtToken)
 
         messenger?.setUserInfo(user!!)

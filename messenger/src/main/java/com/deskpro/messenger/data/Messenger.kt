@@ -128,4 +128,6 @@ internal interface Messenger {
      * logged for debugging and troubleshooting purposes.
      */
     fun enableLogging(): Unit
+
+    fun getLogs(): List<String>
 }

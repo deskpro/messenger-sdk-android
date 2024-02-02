@@ -2,6 +2,7 @@ package com.deskpro.messenger
 
 import android.app.Application
 import android.content.Context
+import com.deskpro.messenger.data.LogCollector
 
 /**
  * Internal Application class to hold the application context.
@@ -19,5 +20,9 @@ internal class App : Application() {
          * The application context.
          */
         var appContext: Context? = null
+
+        fun setCollector() {
+            LogCollector.plantTree()
+        }
     }
 }

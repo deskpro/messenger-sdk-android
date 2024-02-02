@@ -11,4 +11,6 @@
     <string name="user_info_json">User Info (JSON)</string>
     <string name="enable_notifications">Enable Notifications</string>
     <string name="events_and_notifications_log">Events and notifications log</string>
+    <string name="logs">Logs</string>
+    <string name="events">Events</string>
 </resources>

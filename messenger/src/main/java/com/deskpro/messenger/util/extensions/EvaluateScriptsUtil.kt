@@ -101,6 +101,8 @@ internal object EvaluateScriptsUtil {
               $WEB_INTERFACE_KEY.close();
             },
             appEvent: async (messengerId, event) => {
+              var jsonEvent = JSON.stringify(event);
+              $WEB_INTERFACE_KEY.appEvent(jsonEvent);
             },
            },
            childMethods: undefined,
