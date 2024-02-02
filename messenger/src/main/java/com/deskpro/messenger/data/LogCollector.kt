@@ -26,7 +26,7 @@ object LogCollector {
             val current = formatter.format(time)
 
             val logMessage = "$current [$tag] $message"
-            logList.add(logMessage)
+            logList.add(0, logMessage)
         }
     }
 }

@@ -31,6 +31,7 @@ internal class MessengerWebInterface(
      */
     @JavascriptInterface
     fun close() {
+        Timber.tag("AppEvent").d("close")
         context.finish()
     }
 
@@ -41,6 +42,7 @@ internal class MessengerWebInterface(
      */
     @JavascriptInterface
     fun showMessage(message: String) {
+        Timber.tag("AppEvent").d("showMessage: $message")
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
@@ -51,6 +53,7 @@ internal class MessengerWebInterface(
      */
     @JavascriptInterface
     fun getJwtToken(): String {
+        Timber.tag("AppEvent").d("getJwtToken: $jtwToken")
         return jtwToken
     }
 
@@ -61,6 +64,7 @@ internal class MessengerWebInterface(
      */
     @JavascriptInterface
     fun getUserInfo(): String {
+        Timber.tag("AppEvent").d("getUserInfo: $userJson")
         return userJson
     }
 
@@ -69,6 +73,7 @@ internal class MessengerWebInterface(
      */
     @JavascriptInterface
     fun reloadPage() {
+        Timber.tag("AppEvent").d("reloadPage")
         context.runOnUiThread {
             webView.loadUrl(url)
         }

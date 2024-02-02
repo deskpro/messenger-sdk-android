@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">messenger-sdk-android</string>
+    <string name="app_name">DeskPro Messenger</string>
     <string name="test">Test</string>
     <string name="open_messenger">Open messenger</string>
     <string name="open_messenger_new_chat">Open messenger new chat</string>
