@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private var messenger: DeskPro? = null
-    private var appUrl = "https://dev-pr-12730.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d"
+    private var appUrl = "https://dev-pr-12927.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d"
     private var appId = ""
     private var jwtToken = ""
     private var user: User? = null
@@ -77,10 +77,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         // cooperate to be cancellable.
                         ensureActive()
                         if (newLine.contains("DeskPro")) {
-                            stringBuilder.append("<font color='blue'>$newLine</font><br>")
+                            //stringBuilder.append("<font color='blue'>$newLine</font><br>")
+                            stringBuilder.insert(0, "<font color='blue'>$newLine</font><br>")
                         }
                         if (newLine.contains("chromium")) {
-                            stringBuilder.append("<font color='purple'>$newLine</font><br>")
+                            //stringBuilder.append("<font color='purple'>$newLine</font><br>")
+                            stringBuilder.insert(0, "<font color='purple'>$newLine</font><br>")
                         }
                         withContext(Dispatchers.Main) {
                             binding.tvEvents.text = HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY)
