@@ -23,18 +23,22 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:hint="@string/enter_url"
-        app:layout_constraintEnd_toStartOf="@+id/btnUrl"
+        app:layout_constraintEnd_toStartOf="@+id/etAppId"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header_title" />
+        app:layout_constraintTop_toBottomOf="@+id/header_title"
+        app:layout_constraintWidth_percent="0.66" />
 
-    <Button
-        android:id="@+id/btnUrl"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etAppId"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/set"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/enter_app_id"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header_title" />
+        app:layout_constraintStart_toEndOf="@+id/etUrl"
+        app:layout_constraintTop_toBottomOf="@+id/header_title"
+        app:layout_constraintWidth_percent="0.34" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etJWT"
@@ -43,19 +47,9 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:hint="@string/enter_jtw_token"
-        app:layout_constraintEnd_toStartOf="@+id/btnJWT"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etUrl" />
-
-    <Button
-        android:id="@+id/btnJWT"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/set"
-        app:layout_constraintBottom_toBottomOf="@+id/etJWT"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/etJWT" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etUserInfo"
@@ -64,19 +58,9 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:hint="@string/user_info_json"
-        app:layout_constraintEnd_toStartOf="@+id/btnJWT"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etJWT" />
-
-    <Button
-        android:id="@+id/btnUserInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/set"
-        app:layout_constraintBottom_toBottomOf="@+id/etUserInfo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/etUserInfo" />
 
     <Button
         android:id="@+id/btnNotifications"
@@ -127,10 +111,12 @@
         app:layout_constraintTop_toBottomOf="@+id/btnOpenMessenger" />
 
     <TextView
+        android:id="@+id/tvEvents"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:hint="@string/events_and_notifications_log"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

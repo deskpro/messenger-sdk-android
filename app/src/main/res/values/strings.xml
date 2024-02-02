@@ -5,6 +5,7 @@
     <string name="open_messenger_new_chat">Open messenger new chat</string>
     <string name="deskpro_messenger_sample_app">DeskPro Messenger sample app</string>
     <string name="enter_url">Enter URL</string>
+    <string name="enter_app_id">Enter app ID</string>
     <string name="enter_jtw_token">User Auth JWT Token</string>
     <string name="set">Set</string>
     <string name="user_info_json">User Info (JSON)</string>
