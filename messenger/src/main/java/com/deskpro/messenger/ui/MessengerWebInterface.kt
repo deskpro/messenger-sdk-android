@@ -4,6 +4,7 @@ import android.app.Activity
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.widget.Toast
+import timber.log.Timber
 
 /**
  * Internal class representing a JavaScript interface for communication between the WebView
@@ -71,5 +72,10 @@ internal class MessengerWebInterface(
         context.runOnUiThread {
             webView.loadUrl(url)
         }
+    }
+
+    @JavascriptInterface
+    fun appEvent(event: String) {
+        Timber.tag("AppEvent").d(event)
     }
 }
