@@ -2,6 +2,8 @@ package com.deskpro.messenger.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 /**
  * Serializable data class representing user information.
@@ -20,4 +22,14 @@ data class User(
     @SerialName("first_name") var firstName: String? = null,
     @SerialName("last_name") var lastName: String? = null,
     @SerialName("email") var email: String? = null
-)
+) {
+    companion object {
+        fun fromJson(json: String): User {
+            return Json.decodeFromString(json)
+        }
+
+        fun toJson(user: User): String {
+            return Json.encodeToString(user)
+        }
+    }
+}
