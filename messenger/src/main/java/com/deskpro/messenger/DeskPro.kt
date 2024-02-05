@@ -2,6 +2,7 @@ package com.deskpro.messenger
 
 import android.content.Context
 import android.util.Log
+import com.deskpro.messenger.data.LogCollector
 import com.deskpro.messenger.data.Messenger
 import com.deskpro.messenger.data.MessengerConfig
 import com.deskpro.messenger.data.PresentBuilder
@@ -199,7 +200,11 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
      * logged for debugging and troubleshooting purposes.
      */
     override fun enableLogging() {
-        //TODO Not yet implemented
+        App.setCollector()
+    }
+
+    override fun getLogs(): List<String> {
+        return LogCollector.getLogs()
     }
 
     companion object {

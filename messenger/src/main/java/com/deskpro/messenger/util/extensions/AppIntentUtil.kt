@@ -29,16 +29,3 @@ internal fun extractUrl(intent: Intent): String {
 internal fun extractAppId(intent: Intent): String {
     return intent.getStringExtra(APP_ID) ?: ""
 }
-
-/**
- * Extracts the icon resourceID from the provided [intent].
- *
- * This function retrieves the resourceID from the extras of the given [intent].
- * If the resourceID is not present, -1 is returned.
- *
- * @param intent The Intent containing potential extras, including the icon resourceID.
- * @return The extracted resourceID or an -1.
- */
-internal fun extractAppIcon(intent: Intent): Int {
-    return intent.getIntExtra(APP_ID, -1)
-}

@@ -12,7 +12,6 @@ import com.deskpro.messenger.ui.MessengerWebViewActivity
  *
  * @param url The base URL for constructing the path.
  * @param appId The application ID used for presentation.
- * @param appIcon The resourceID used for the notification.
  */
 class PresentBuilder(url: String, private val appId: String) {
     /**

@@ -2,6 +2,7 @@ package com.deskpro.messenger
 
 import android.app.Application
 import android.content.Context
+import com.deskpro.messenger.data.LogCollector
 
 /**
  * Internal Application class to hold the application context.
@@ -19,6 +20,14 @@ internal class App : Application() {
          * The application context.
          */
         var appContext: Context? = null
+
+        /**
+         * A resource ID of the icon to be displayed in the chat push notification.
+         */
         var appIcon: Int = R.drawable.deskpro_logo
+
+        fun setCollector() {
+            LogCollector.plantTree()
+        }
     }
 }
