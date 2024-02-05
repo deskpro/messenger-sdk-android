@@ -19,6 +19,6 @@ internal class App : Application() {
          * The application context.
          */
         var appContext: Context? = null
-        var isForeground: Boolean = false
+        var appIcon: Int = R.drawable.deskpro_logo
     }
 }

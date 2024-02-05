@@ -7,6 +7,7 @@ import com.deskpro.messenger.data.MessengerConfig
 import com.deskpro.messenger.data.PresentBuilder
 import com.deskpro.messenger.data.PushNotificationData
 import com.deskpro.messenger.data.User
+import com.deskpro.messenger.util.NotificationHelper
 import com.deskpro.messenger.util.Prefs
 
 /**
@@ -24,6 +25,8 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
      */
     private var prefs: Prefs? = null
 
+    private var notificationHelper: NotificationHelper? = null
+
     /**
      * Initializes the functionality of the application.
      *
@@ -34,7 +37,9 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
      */
     override fun initialize(context: Context) {
         App.appContext = context
+        App.appIcon = messengerConfig.appIcon
         prefs = Prefs(context, messengerConfig.appId)
+        notificationHelper = NotificationHelper(context)
         Log.d(TAG, "Initialized")
     }
 
@@ -129,7 +134,17 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
      * @see isDeskProPushNotification
      */
     override fun handlePushNotification(pushNotification: PushNotificationData) {
-        //TODO Not yet implemented
+        if (!pushNotification.isPushNotificationDataValid()) {
+            //Timber.d("Invalid push notification data")
+            return
+        }
+
+        notificationHelper?.showNotification(
+            title = pushNotification.title,
+            body = pushNotification.body,
+            badgeNumber = pushNotification.getNotificationNumber(),
+            icon = messengerConfig.appIcon
+        )
     }
 
     /**
@@ -151,7 +166,7 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
         val url = with(messengerConfig) {
             this.appUrl.plus(this.appId)
         }
-        return PresentBuilder(url, messengerConfig.appId, messengerConfig.appIcon)
+        return PresentBuilder(url, messengerConfig.appId)
     }
 
     /**
