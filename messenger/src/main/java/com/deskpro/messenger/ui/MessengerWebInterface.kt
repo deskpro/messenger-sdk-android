@@ -24,6 +24,7 @@ internal class MessengerWebInterface(
     private val webView: WebView,
     private val url: String,
     private val jtwToken: String,
+    private val fcmToken: String,
     private val userJson: String
 ) {
     /**
@@ -55,6 +56,12 @@ internal class MessengerWebInterface(
     fun getJwtToken(): String {
         Timber.tag("AppEvent").d("getJwtToken: $jtwToken")
         return jtwToken
+    }
+
+    @JavascriptInterface
+    fun getFcmToken(): String {
+        Timber.tag("AppEvent").d("getFcmToken: $fcmToken")
+        return fcmToken
     }
 
     /**

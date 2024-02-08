@@ -67,6 +67,7 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
                     webView = binding.webView,
                     url = url,
                     jtwToken = prefs?.getJwtToken() ?: "",
+                    fcmToken = prefs?.getFCMToken() ?: "",
                     userJson = prefs?.getUserInfoJson() ?: ""
                 ),
                 WEB_INTERFACE_KEY
