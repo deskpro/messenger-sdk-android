@@ -37,8 +37,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     //region INITIALIZATION
 
     private lateinit var binding: ActivityMainBinding
-    private var messenger: DeskPro? = null
-    private var appUrl = "https://dev-pr-12927.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d"
+
+
+    private var appUrl = "https://dev-pr-13019.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d"
     private var appId = ""
     private var jwtToken = ""
     private var fcmToken = ""
@@ -147,7 +148,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 btnEvents -> {
                     MaterialAlertDialogBuilder(this@MainActivity)
                         .setTitle("Messenger app events")
-                        .setMessage(messenger?.getLogs()?.joinToString("\n\n"))
+                        .setMessage(App.messenger?.getLogs()?.joinToString("\n\n"))
                         .setPositiveButton(
                             "OK"
                         ) { _: DialogInterface?, _: Int -> }
@@ -181,20 +182,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun startDeskPro() {
-        messenger = DeskPro(
+        App.messenger = DeskPro(
             MessengerConfig(
                 appUrl = appUrl,
                 appId = appId,
                 appIcon = R.drawable.ic_launcher_foreground
             )
         )
-        messenger?.initialize(applicationContext)
-        messenger?.enableLogging()
-        messenger?.authorizeUser(jwtToken)
+        App.messenger?.initialize(applicationContext)
+        App.messenger?.enableLogging()
+        App.messenger?.authorizeUser(jwtToken)
 
-        messenger?.setUserInfo(user!!)
+        App.messenger?.setUserInfo(user!!)
 
-        messenger?.present()?.show()
+        App.messenger?.present()?.show()
     }
 
     private fun askNotificationPermission() {
@@ -211,12 +212,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun onNotificationEnablePressed() {
-        messenger?.setPushRegistrationToken(fcmToken)
+        App.messenger?.setPushRegistrationToken(fcmToken)
     }
 
     private fun onNotifyMePressed() {
-        messenger ?: run {
-            messenger = DeskPro(
+        App.messenger ?: run {
+            App.messenger = DeskPro(
                 MessengerConfig(
                     appUrl = appUrl,
                     appId = appId,
@@ -227,7 +228,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
-        messenger?.handlePushNotification(
+        App.messenger?.handlePushNotification(
             PushNotificationData(
                 "Test",
                 "Message of the test notification",

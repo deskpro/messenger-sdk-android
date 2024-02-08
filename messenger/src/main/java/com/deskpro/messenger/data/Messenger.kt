@@ -71,7 +71,7 @@ internal interface Messenger {
      * @param pushNotification The push notification data to be analyzed.
      * @return `true` if the push notification is related to DeskPro; `false` otherwise.
      */
-    fun isDeskProPushNotification(pushNotification: PushNotificationData): Boolean
+    fun isDeskProPushNotification(data: Map<String, String>): Boolean
 
     /**
      * Handles the incoming push notification data if it is related to DeskPro.

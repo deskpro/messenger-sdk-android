@@ -9,8 +9,8 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.deskpro.messenger.sample"
-        minSdk = 23
+        applicationId = "com.deskpro.deskpro_messenger"
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
