@@ -37,12 +37,8 @@ class NotificationHelper(private val context: Context) {
      * @param icon A resource ID of the icon to be displayed in the notification.
      **/
     fun showNotification(title: String, body: String, badgeNumber: Int? = null, icon: Int = -1, url: String, appId: String) {
-        val intent = Intent(context, MessengerWebViewActivity::class.java).apply {
-            putExtra(Constants.NEW_MESSAGE, true)
-            putExtra(Constants.WEB_URL, url)
-            putExtra(Constants.APP_ID, appId)
-        }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val intent = MessengerWebViewActivity.notifIntent(context, url, appId)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 684351, intent, PendingIntent.FLAG_IMMUTABLE)
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(if (icon == -1) R.drawable.deskpro_logo else icon)

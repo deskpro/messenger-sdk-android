@@ -159,5 +159,13 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }
+
+        fun notifIntent(context: Context, path: String, appId: String): Intent {
+            //.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            return Intent(context, MessengerWebViewActivity::class.java)
+                .putExtra(Constants.NEW_MESSAGE, true)
+                .putExtra(Constants.WEB_URL, path)
+                .putExtra(Constants.APP_ID, appId)
+        }
     }
 }
