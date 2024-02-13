@@ -84,8 +84,9 @@ internal interface Messenger {
      *
      * @param pushNotification The push notification data to be handled.
      * @see isDeskProPushNotification
+     * @return `true` if the push notification is successfully handled; `false` otherwise.
      */
-    fun handlePushNotification(pushNotification: PushNotificationData): Unit
+    fun handlePushNotification(pushNotification: PushNotificationData): Boolean
 
     /**
      * Provides a [PresentBuilder] for constructing presentation paths within the application.

@@ -1,7 +1,10 @@
 package com.deskpro.messenger
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.util.Log
+import androidx.core.content.ContextCompat
 import com.deskpro.messenger.data.LogCollector
 import com.deskpro.messenger.data.Messenger
 import com.deskpro.messenger.data.MessengerConfig
@@ -10,6 +13,7 @@ import com.deskpro.messenger.data.PushNotificationData
 import com.deskpro.messenger.data.User
 import com.deskpro.messenger.util.NotificationHelper
 import com.deskpro.messenger.util.Prefs
+import timber.log.Timber
 
 /**
  * Implementation of the [Messenger] interface for interacting with DeskPro messaging functionality.
@@ -132,17 +136,42 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
      *
      * @param pushNotification The push notification data to be handled.
      * @see isDeskProPushNotification
+     * @return `true` if the push notification is successfully handled; `false` otherwise.
      */
-    override fun handlePushNotification(pushNotification: PushNotificationData) {
-        if (isDeskProPushNotification(pushNotification.data)) {
-            notificationHelper?.showNotification(
-                title = pushNotification.title,
-                body = pushNotification.body,
-                icon = messengerConfig.appIcon,
-                url = messengerConfig.appUrl,
-                appId = messengerConfig.appId
-            )
+    override fun handlePushNotification(pushNotification: PushNotificationData): Boolean {
+        if (!isDeskProPushNotification(pushNotification.data)) {
+            Timber.tag(TAG).d("Not DeskPro push notification")
+            return false
         }
+
+        if (DeskProApp.appContext == null) {
+            Timber.tag(TAG).d("Context is null")
+            return false
+        }
+
+        if (ContextCompat.checkSelfPermission(
+                DeskProApp.appContext!!,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Timber.tag(TAG).d("Notification permission not granted")
+            return false
+        }
+
+        if (prefs == null || prefs?.getFCMToken().isNullOrEmpty()) {
+            Timber.tag(TAG).d("FCM token not set!")
+            return false
+        }
+
+        notificationHelper?.showNotification(
+            title = pushNotification.title,
+            body = pushNotification.body,
+            icon = messengerConfig.appIcon,
+            url = messengerConfig.appUrl,
+            appId = messengerConfig.appId
+        )
+
+        return true
     }
 
     /**
