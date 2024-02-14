@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMainBinding
 
 
-    private var appUrl = "https://dev-pr-13019.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d"
+    private var appUrl = "https://dev-pr-12730.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d"
     private var appId = ""
     private var jwtToken = ""
     private var fcmToken = ""
@@ -115,8 +115,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.apply {
             when (v) {
                 btnNotifications -> {
-                    askNotificationPermission()
-                    //messenger?.handlePushNotification(PushNotificationData())
+                    onNotificationEnablePressed()
                 }
 
                 btnOpenMessenger -> {
@@ -192,6 +191,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         App.messenger?.initialize(applicationContext)
         App.messenger?.enableLogging()
         App.messenger?.authorizeUser(jwtToken)
+        App.messenger?.setPushRegistrationToken(fcmToken)
 
         App.messenger?.setUserInfo(user!!)
 
@@ -202,7 +202,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
                 Log.d(TAG, "Notification permission granted!")
-                onNotificationEnablePressed()
             } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
                 Log.w(TAG, "Notification permission denied permanently!")
             } else {
@@ -212,7 +211,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun onNotificationEnablePressed() {
-        App.messenger?.setPushRegistrationToken(fcmToken)
+        askNotificationPermission()
     }
 
     private fun onNotifyMePressed() {
