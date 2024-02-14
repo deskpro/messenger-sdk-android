@@ -1,7 +1,7 @@
 package com.deskpro.messenger.data
 
 import android.util.Log
-import com.deskpro.messenger.App
+import com.deskpro.messenger.DeskProApp
 import com.deskpro.messenger.ui.MessengerWebViewActivity
 
 /**
@@ -58,11 +58,11 @@ class PresentBuilder(url: String, private val appId: String) {
      * Otherwise, the WebView is started with the constructed path and application ID.
      */
     fun show() {
-        if (App.appContext == null) {
+        if (DeskProApp.appContext == null) {
             Log.d("PresentBuilder", "Context is null")
             return
         }
-        App.appContext?.let {
+        DeskProApp.appContext?.let {
             MessengerWebViewActivity.start(context = it, path = path.toString(), appId = appId)
         }
     }

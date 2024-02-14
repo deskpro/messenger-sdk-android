@@ -10,7 +10,7 @@ import com.deskpro.messenger.data.LogCollector
  * The `App` class is an extension of the [Application] class and serves as a container
  * for storing and accessing the application context throughout its lifecycle.
  */
-internal class App : Application() {
+internal class DeskProApp : Application() {
 
     /**
      * A companion object holding a static reference to the application context.
@@ -20,6 +20,11 @@ internal class App : Application() {
          * The application context.
          */
         var appContext: Context? = null
+
+        /**
+         * A resource ID of the icon to be displayed in the chat push notification.
+         */
+        var appIcon: Int = R.drawable.deskpro_logo
 
         fun setCollector() {
             LogCollector.plantTree()

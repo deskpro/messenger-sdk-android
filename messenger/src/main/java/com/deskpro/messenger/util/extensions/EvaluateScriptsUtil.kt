@@ -84,6 +84,12 @@ internal object EvaluateScriptsUtil {
              if (data) {
               const { side, offsetBottom, offsetSide, width, height } = data;
              }
+             
+             const fcmToken = await $WEB_INTERFACE_KEY.getFcmToken();
+             
+             window.DESKPRO_MESSENGER_CONNECTION.childMethods?.setDeviceToken(messengerId, {
+                token: fcmToken
+             });
             },
             getViewHeight: async (messengerId) => {
              return "fullscreen";

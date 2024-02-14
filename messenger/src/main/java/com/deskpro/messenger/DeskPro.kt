@@ -1,14 +1,19 @@
 package com.deskpro.messenger
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.util.Log
+import androidx.core.content.ContextCompat
 import com.deskpro.messenger.data.LogCollector
 import com.deskpro.messenger.data.Messenger
 import com.deskpro.messenger.data.MessengerConfig
 import com.deskpro.messenger.data.PresentBuilder
 import com.deskpro.messenger.data.PushNotificationData
 import com.deskpro.messenger.data.User
+import com.deskpro.messenger.util.NotificationHelper
 import com.deskpro.messenger.util.Prefs
+import timber.log.Timber
 
 /**
  * Implementation of the [Messenger] interface for interacting with DeskPro messaging functionality.
@@ -25,6 +30,8 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
      */
     private var prefs: Prefs? = null
 
+    private var notificationHelper: NotificationHelper? = null
+
     /**
      * Initializes the functionality of the application.
      *
@@ -34,8 +41,10 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
      * @param context The application context to be used for initialization.
      */
     override fun initialize(context: Context) {
-        App.appContext = context
+        DeskProApp.appContext = context
+        DeskProApp.appIcon = messengerConfig.appIcon
         prefs = Prefs(context, messengerConfig.appId)
+        notificationHelper = NotificationHelper(context)
         Log.d(TAG, "Initialized")
     }
 
@@ -99,7 +108,7 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
      * @return `true` if the push registration token is successfully set; `false` otherwise.
      */
     override fun setPushRegistrationToken(token: String): Boolean {
-        //TODO Not yet implemented
+        prefs?.setFCMToken(token)
         return true
     }
 
@@ -112,9 +121,8 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
      * @param pushNotification The push notification data to be analyzed.
      * @return `true` if the push notification is related to DeskPro; `false` otherwise.
      */
-    override fun isDeskProPushNotification(pushNotification: PushNotificationData): Boolean {
-        //TODO Not yet implemented
-        return true
+    override fun isDeskProPushNotification(data: Map<String, String>): Boolean {
+        return data.containsKey("issuer") && data.containsValue("deskpro-messenger")
     }
 
     /**
@@ -128,9 +136,37 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
      *
      * @param pushNotification The push notification data to be handled.
      * @see isDeskProPushNotification
+     * @return `true` if the push notification is successfully handled; `false` otherwise.
      */
-    override fun handlePushNotification(pushNotification: PushNotificationData) {
-        //TODO Not yet implemented
+    override fun handlePushNotification(pushNotification: PushNotificationData): Boolean {
+        if (!isDeskProPushNotification(pushNotification.data)) {
+            Timber.tag(TAG).d("Not DeskPro push notification")
+            return false
+        }
+
+        if (DeskProApp.appContext == null) {
+            Timber.tag(TAG).d("Context is null")
+            return false
+        }
+
+        if (ContextCompat.checkSelfPermission(
+                DeskProApp.appContext!!,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Timber.tag(TAG).d("Notification permission not granted")
+            return false
+        }
+
+        notificationHelper?.showNotification(
+            title = pushNotification.title,
+            body = pushNotification.body,
+            icon = messengerConfig.appIcon,
+            url = messengerConfig.appUrl,
+            appId = messengerConfig.appId
+        )
+
+        return true
     }
 
     /**
@@ -185,7 +221,7 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
      * logged for debugging and troubleshooting purposes.
      */
     override fun enableLogging() {
-        App.setCollector()
+        DeskProApp.setCollector()
     }
 
     override fun getLogs(): List<String> {

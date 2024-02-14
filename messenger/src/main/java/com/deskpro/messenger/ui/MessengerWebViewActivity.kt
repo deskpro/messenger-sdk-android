@@ -67,6 +67,7 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
                     webView = binding.webView,
                     url = url,
                     jtwToken = prefs?.getJwtToken() ?: "",
+                    fcmToken = prefs?.getFCMToken() ?: "",
                     userJson = prefs?.getUserInfoJson() ?: ""
                 ),
                 WEB_INTERFACE_KEY
@@ -142,6 +143,8 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
      * Companion object providing a convenient method to start the [MessengerWebViewActivity].
      */
     companion object {
+        private const val TAG = "DeskPro"
+
         /**
          * Starts the [MessengerWebViewActivity] with the specified parameters.
          *
@@ -155,6 +158,14 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
                 .putExtra(Constants.APP_ID, appId)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
+        }
+
+        fun notifIntent(context: Context, path: String, appId: String): Intent {
+            //.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            return Intent(context, MessengerWebViewActivity::class.java)
+                .putExtra(Constants.NEW_MESSAGE, true)
+                .putExtra(Constants.WEB_URL, path)
+                .putExtra(Constants.APP_ID, appId)
         }
     }
 }

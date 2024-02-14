@@ -5,4 +5,9 @@ package com.deskpro.messenger.data
  *
  * The `PushNotificationData` class encapsulates the information included in a push notification.
  */
-class PushNotificationData
+data class PushNotificationData(
+    //val topic: String? = null,
+    val title: String,
+    val body: String,
+    val data: Map<String, String>
+)
