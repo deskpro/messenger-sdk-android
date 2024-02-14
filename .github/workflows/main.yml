@@ -26,13 +26,12 @@ jobs:
     - name: Change wrapper permissions
       run: chmod +x ./gradlew
 
-    - name: Run android tests
+    - name: Run android emulator
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: 29
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
         disable-animations: true
-        script: ./gradlew :messenger:connectedAndroidTest
 
     - name: Gradle Build and Test
       uses: eskatos/gradle-command-action@v1.3.3
@@ -40,4 +39,4 @@ jobs:
         wrapper-cache-enabled: true
         dependencies-cache-enabled: true
         configuration-cache-enabled: true
-        arguments: clean assembleDebug testDebugUnitTest --info --stacktrace
+        arguments: clean assembleDebug testDebugUnitTest :messenger:connectedAndroidTest --info --stacktrace
