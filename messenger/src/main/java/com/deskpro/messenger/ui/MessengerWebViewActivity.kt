@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -36,6 +35,8 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
      */
     private lateinit var binding: ActivityMessengerWebViewBinding
 
+    private lateinit var customWebChromeClient: CustomWebChromeClient
+
     /**
      * SharedPreferences utility for managing user information and JWT tokens.
      */
@@ -58,7 +59,8 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
             settings.domStorageEnabled = true
             settings.javaScriptEnabled = true
 
-            webChromeClient = object : WebChromeClient() {}
+            customWebChromeClient = CustomWebChromeClient()
+            webChromeClient = customWebChromeClient
 
             // Add JavaScript interface for JS communication with the crucial key - androidApp
             addJavascriptInterface(
@@ -108,6 +110,12 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
         url.let { binding.webView.loadUrl(url) }
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        customWebChromeClient.onActivityResult(requestCode, resultCode, data)
+    }
+
     /**
      * Handles saving the WebView state when the activity is paused.
      */
@@ -150,7 +158,7 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
          *
          * @param context The context from which the activity is started.
          * @param path The web URL path to load in the WebView.
-         * @param appId The application ID associated with the DeskPro Messenger module.
+         * @param appId The aaspplication ID associated with the DeskPro Messenger module.
          */
         fun start(context: Context, path: String, appId: String) {
             val intent = Intent(context, MessengerWebViewActivity::class.java)
