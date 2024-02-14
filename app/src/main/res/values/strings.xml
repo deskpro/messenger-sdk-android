@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">messenger-sdk-android</string>
+    <string name="app_name">DeskPro Messenger</string>
+    <string name="test">Test</string>
+    <string name="open_messenger">Open messenger</string>
+    <string name="open_messenger_new_chat">Open messenger new chat</string>
+    <string name="deskpro_messenger_sample_app">DeskPro Messenger sample app</string>
+    <string name="enter_url">Enter URL</string>
+    <string name="enter_app_id">Enter app ID</string>
+    <string name="enter_jtw_token">User Auth JWT Token</string>
+    <string name="set">Set</string>
+    <string name="user_info_json">User Info (JSON)</string>
+    <string name="enable_notifications">Enable Notifications</string>
+    <string name="events_and_notifications_log">Events and notifications log</string>
+    <string name="logs">Logs</string>
+    <string name="events">Events</string>
 </resources>
