@@ -158,11 +158,6 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
             return false
         }
 
-        if (prefs == null || prefs?.getFCMToken().isNullOrEmpty()) {
-            Timber.tag(TAG).d("FCM token not set!")
-            return false
-        }
-
         notificationHelper?.showNotification(
             title = pushNotification.title,
             body = pushNotification.body,
