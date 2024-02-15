@@ -74,6 +74,13 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
     }
 
     /**
+     * Getter method for user info, should only be used for testing.
+     */
+    fun getUserInfo(): User? {
+        return prefs?.getUserInfo()
+    }
+
+    /**
      * Sets a user JWT token that enables Messenger to treat this user as a logged-in user.
      *
      * @param userJwt The JSON Web Token (JWT) representing the user's authentication.
@@ -82,6 +89,13 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
     override fun authorizeUser(userJwt: String): Boolean {
         prefs?.setJwtToken(userJwt)
         return true
+    }
+
+    /**
+     * Getter method for JWT token, should only be used for testing.
+     */
+    fun getJwtToken(): String? {
+        return prefs?.getJwtToken()
     }
 
     /**
@@ -110,6 +124,13 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
     override fun setPushRegistrationToken(token: String): Boolean {
         prefs?.setFCMToken(token)
         return true
+    }
+
+    /**
+     * Getter method for FCM token, should only be used for testing.
+     */
+    fun getPushRegistrationToken(): String? {
+        return prefs?.getFCMToken()
     }
 
     /**

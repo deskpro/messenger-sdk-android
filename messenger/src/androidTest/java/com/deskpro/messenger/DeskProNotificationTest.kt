@@ -15,7 +15,7 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-open class DeskProTest {
+open class DeskProNotificationTest {
 
     private lateinit var context: Context
     private lateinit var messengerConfig: MessengerConfig
