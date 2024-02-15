@@ -11,6 +11,8 @@ import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.deskpro.messenger.databinding.ActivityMessengerWebViewBinding
 import com.deskpro.messenger.util.Constants
@@ -20,6 +22,7 @@ import com.deskpro.messenger.util.Prefs
 import com.deskpro.messenger.util.extensions.EvaluateScriptsUtil.initAndOpenScript
 import com.deskpro.messenger.util.extensions.extractAppId
 import com.deskpro.messenger.util.extensions.extractUrl
+import timber.log.Timber
 
 /**
  * Activity hosting the WebView for DeskPro Messenger functionality.
@@ -35,12 +38,20 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
      */
     private lateinit var binding: ActivityMessengerWebViewBinding
 
-    private lateinit var customWebChromeClient: CustomWebChromeClient
+    private lateinit var deskProChromeClient: DeskProChromeClient
 
     /**
      * SharedPreferences utility for managing user information and JWT tokens.
      */
     private var prefs: Prefs? = null
+
+    /**
+     * Activity result launcher for handling file uploads.
+     */
+    private val fileUploadLauncher = this.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val data: Intent? = result.data
+        deskProChromeClient.handleFileUpload(result.resultCode, data)
+    }
 
     /**
      * Handles the creation of the activity.
@@ -59,8 +70,8 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
             settings.domStorageEnabled = true
             settings.javaScriptEnabled = true
 
-            customWebChromeClient = CustomWebChromeClient()
-            webChromeClient = customWebChromeClient
+            deskProChromeClient = DeskProChromeClient(fileUploadLauncher)
+            webChromeClient = deskProChromeClient
 
             // Add JavaScript interface for JS communication with the crucial key - androidApp
             addJavascriptInterface(
@@ -108,12 +119,14 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
         }
 
         url.let { binding.webView.loadUrl(url) }
-    }
 
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        customWebChromeClient.onActivityResult(requestCode, resultCode, data)
+        //Handles the back button press to finish the activity.
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Timber.tag(TAG).d("onBackPressed")
+                this@MessengerWebViewActivity.finish()
+            }
+        })
     }
 
     /**
@@ -130,14 +143,6 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         binding.webView.restoreState(savedInstanceState)
-    }
-
-    /**
-     * Handles the back button press to finish the activity.
-     */
-    override fun onBackPressed() {
-        super.onBackPressed()
-        this.finish()
     }
 
     /**
