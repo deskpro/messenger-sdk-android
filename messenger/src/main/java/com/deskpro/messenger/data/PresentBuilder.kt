@@ -51,6 +51,10 @@ class PresentBuilder(url: String, private val appId: String) {
         return this
     }
 
+    internal fun getPath(): String {
+        return path.toString()
+    }
+
     /**
      * Shows the WebView with the constructed path.
      *

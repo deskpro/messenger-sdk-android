@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.deskpro.messenger.data.MessengerConfig
+import com.deskpro.messenger.data.PresentBuilder
 import com.deskpro.messenger.data.User
 import org.junit.Assert
 import org.junit.Before
@@ -99,6 +100,20 @@ open class DeskProSetupTest {
         Assert.assertNotEquals("❌The users match.❌", deskPro1.getUserInfo()?.toJson(), deskPro2.getUserInfo()?.toJson())
         Assert.assertNotEquals("❌The jwt tokens match.❌", deskPro1.getJwtToken(), deskPro2.getJwtToken())
         Assert.assertNotEquals("❌The device tokens match.❌", deskPro1.getPushRegistrationToken(), deskPro2.getPushRegistrationToken())
+    }
+
+    @Test
+    fun testPresentBuilder() {
+        val presentBuilder = PresentBuilder("https://dev-pr-13019.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d", "1")
+        presentBuilder.chatHistory(1)
+        presentBuilder.article(1)
+        presentBuilder.comments()
+
+        Assert.assertEquals(
+            "❌The paths do not match.❌",
+            "https://dev-pr-13019.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d/chat_history/1/article/1/comments",
+            presentBuilder.getPath()
+        )
     }
 
     @Test
