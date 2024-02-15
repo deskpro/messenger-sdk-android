@@ -2,9 +2,9 @@ package com.deskpro.messenger
 
 import android.Manifest
 import android.content.Context
+import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.GrantPermissionRule
 import com.deskpro.messenger.data.MessengerConfig
 import com.deskpro.messenger.data.PushNotificationData
 import org.junit.Assert
@@ -21,9 +21,11 @@ open class DeskProTest {
     private lateinit var messengerConfig: MessengerConfig
     private lateinit var deskPro: DeskPro
 
-    @JvmField
-    @Rule
-    val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.POST_NOTIFICATIONS)
+    @get:Rule
+    val permissionRule: GrantPermissionApiRule = GrantPermissionApiRule.grant(
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU,
+        Manifest.permission.POST_NOTIFICATIONS
+    )
 
     @Before
     fun setUp() {
