@@ -76,7 +76,7 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
     /**
      * Getter method for user info, should only be used for testing.
      */
-    fun getUserInfo(): User? {
+    internal fun getUserInfo(): User? {
         return prefs?.getUserInfo()
     }
 
@@ -94,7 +94,7 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
     /**
      * Getter method for JWT token, should only be used for testing.
      */
-    fun getJwtToken(): String? {
+    internal fun getJwtToken(): String? {
         return prefs?.getJwtToken()
     }
 
@@ -129,7 +129,7 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
     /**
      * Getter method for FCM token, should only be used for testing.
      */
-    fun getPushRegistrationToken(): String? {
+    internal fun getPushRegistrationToken(): String? {
         return prefs?.getFCMToken()
     }
 
