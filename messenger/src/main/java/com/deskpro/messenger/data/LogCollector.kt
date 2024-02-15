@@ -5,7 +5,7 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
-object LogCollector {
+internal object LogCollector {
 
     private val logList = mutableListOf<String>()
 

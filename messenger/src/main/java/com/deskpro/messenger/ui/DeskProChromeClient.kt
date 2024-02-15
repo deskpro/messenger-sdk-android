@@ -10,7 +10,7 @@ import android.webkit.WebView
 import androidx.activity.result.ActivityResultLauncher
 
 @SuppressLint("SetJavaScriptEnabled")
-class DeskProChromeClient(private val fileUploadLauncher: ActivityResultLauncher<Intent>) : WebChromeClient() {
+internal class DeskProChromeClient(private val fileUploadLauncher: ActivityResultLauncher<Intent>) : WebChromeClient() {
 
     private var filePathCallback: ValueCallback<Array<Uri>>? = null
     private var fileChooserParams: FileChooserParams? = null
