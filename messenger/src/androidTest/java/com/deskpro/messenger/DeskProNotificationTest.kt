@@ -35,7 +35,7 @@ open class DeskProNotificationTest {
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         messengerConfig = MessengerConfig(
-            appUrl = "https://dev-pr-13019.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d",
+            appUrl = "test/url/data",
             appId = "",
         )
         deskPro = DeskPro(context, messengerConfig)
@@ -54,16 +54,25 @@ open class DeskProNotificationTest {
     }
 
     @Test
-    fun testValidPushNotification() {
-        val dataValid = deskPro.isDeskProPushNotification(validPushData.data)
-        Assert.assertTrue("❌The notification was not valid!❌", dataValid)
+    fun testIsDeskProPushNotificationWithValidData() {
+        val result = deskPro.isDeskProPushNotification(validPushData.data)
+        Assert.assertTrue("❌The notification was not valid!❌", result)
+    }
 
+    @Test
+    fun testIsDeskProPushNotificationWithInvalidData() {
+        val result = deskPro.isDeskProPushNotification(invalidPushData.data)
+        Assert.assertFalse("❌The notification is valid!❌", result)
+    }
+
+    @Test
+    fun testShowPushNotificationWithValidData() {
         val success = deskPro.handlePushNotification(validPushData)
         Assert.assertTrue("❌The notification was not sent successfully!❌", success)
     }
 
     @Test
-    fun testInvalidPushNotificationData() {
+    fun testShowPushNotificationWithInvalidData() {
         val success = deskPro.handlePushNotification(invalidPushData)
         Assert.assertFalse("❌The notification is send and it should not be!❌", success)
     }

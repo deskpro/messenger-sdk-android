@@ -18,7 +18,7 @@ open class DeskProSetupTest {
     private lateinit var context: Context
     private lateinit var messengerConfig: MessengerConfig
     private lateinit var deskPro: DeskPro
-    private val appUrl = "https://dev-pr-12730.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d"
+    private val appUrl = "test/url/data"
 
     @Before
     fun setUp() {

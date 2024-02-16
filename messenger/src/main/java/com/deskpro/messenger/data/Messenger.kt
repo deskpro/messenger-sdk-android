@@ -1,7 +1,5 @@
 package com.deskpro.messenger.data
 
-import android.content.Context
-
 internal interface Messenger {
 
     /**
