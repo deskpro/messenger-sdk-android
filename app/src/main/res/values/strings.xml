@@ -13,4 +13,6 @@
     <string name="events_and_notifications_log">Events and notifications log</string>
     <string name="logs">Logs</string>
     <string name="events">Events</string>
+    <string name="notify_me">Notify me</string>
+    <string name="default_notification_channel_id">82139602437</string>
 </resources>

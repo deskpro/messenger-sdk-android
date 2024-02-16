@@ -19,6 +19,11 @@ internal object Constants {
     const val APP_ID = "app_id"
 
     /**
+     * Key for passing the new message through Intent extras.
+     */
+    const val NEW_MESSAGE = "new_message"
+
+    /**
      * Key representing the Android web interface in JavaScript.
      */
     const val WEB_INTERFACE_KEY = "androidApp"

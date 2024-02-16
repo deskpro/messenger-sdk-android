@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "450727442932",
+    "project_id": "deskpro-messenger",
+    "storage_bucket": "deskpro-messenger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450727442932:android:8e70f61e35fb59ac81e1a1",
+        "android_client_info": {
+          "package_name": "com.deskpro.deskpro_messenger"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtDvIMNqVdxOVMUqi2yEqqFZshdoeJUrI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

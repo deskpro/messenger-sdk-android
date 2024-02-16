@@ -7,11 +7,12 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.deskpro.messenger.databinding.ActivityMessengerWebViewBinding
 import com.deskpro.messenger.util.Constants
@@ -21,6 +22,7 @@ import com.deskpro.messenger.util.Prefs
 import com.deskpro.messenger.util.extensions.EvaluateScriptsUtil.initAndOpenScript
 import com.deskpro.messenger.util.extensions.extractAppId
 import com.deskpro.messenger.util.extensions.extractUrl
+import timber.log.Timber
 
 /**
  * Activity hosting the WebView for DeskPro Messenger functionality.
@@ -36,10 +38,20 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
      */
     private lateinit var binding: ActivityMessengerWebViewBinding
 
+    private lateinit var deskProChromeClient: DeskProChromeClient
+
     /**
      * SharedPreferences utility for managing user information and JWT tokens.
      */
     private var prefs: Prefs? = null
+
+    /**
+     * Activity result launcher for handling file uploads.
+     */
+    private val fileUploadLauncher = this.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val data: Intent? = result.data
+        deskProChromeClient.handleFileUpload(result.resultCode, data)
+    }
 
     /**
      * Handles the creation of the activity.
@@ -58,7 +70,8 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
             settings.domStorageEnabled = true
             settings.javaScriptEnabled = true
 
-            webChromeClient = object : WebChromeClient() {}
+            deskProChromeClient = DeskProChromeClient(fileUploadLauncher)
+            webChromeClient = deskProChromeClient
 
             // Add JavaScript interface for JS communication with the crucial key - androidApp
             addJavascriptInterface(
@@ -67,6 +80,7 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
                     webView = binding.webView,
                     url = url,
                     jtwToken = prefs?.getJwtToken() ?: "",
+                    fcmToken = prefs?.getFCMToken() ?: "",
                     userJson = prefs?.getUserInfoJson() ?: ""
                 ),
                 WEB_INTERFACE_KEY
@@ -105,6 +119,14 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
         }
 
         url.let { binding.webView.loadUrl(url) }
+
+        //Handles the back button press to finish the activity.
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Timber.tag(TAG).d("onBackPressed")
+                this@MessengerWebViewActivity.finish()
+            }
+        })
     }
 
     /**
@@ -124,14 +146,6 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
     }
 
     /**
-     * Handles the back button press to finish the activity.
-     */
-    override fun onBackPressed() {
-        super.onBackPressed()
-        this.finish()
-    }
-
-    /**
      * Loads the error HTML page in the WebView when an error occurs.
      */
     private fun loadErrorHtmlPage() {
@@ -142,12 +156,14 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
      * Companion object providing a convenient method to start the [MessengerWebViewActivity].
      */
     companion object {
+        private const val TAG = "DeskPro"
+
         /**
          * Starts the [MessengerWebViewActivity] with the specified parameters.
          *
          * @param context The context from which the activity is started.
          * @param path The web URL path to load in the WebView.
-         * @param appId The application ID associated with the DeskPro Messenger module.
+         * @param appId The aaspplication ID associated with the DeskPro Messenger module.
          */
         fun start(context: Context, path: String, appId: String) {
             val intent = Intent(context, MessengerWebViewActivity::class.java)
@@ -155,6 +171,14 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
                 .putExtra(Constants.APP_ID, appId)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
+        }
+
+        fun notifIntent(context: Context, path: String, appId: String): Intent {
+            //.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            return Intent(context, MessengerWebViewActivity::class.java)
+                .putExtra(Constants.NEW_MESSAGE, true)
+                .putExtra(Constants.WEB_URL, path)
+                .putExtra(Constants.APP_ID, appId)
         }
     }
 }

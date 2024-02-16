@@ -1,17 +1,6 @@
 package com.deskpro.messenger.data
 
-import android.content.Context
-
 internal interface Messenger {
-    /**
-     * Initializes the functionality of the application.
-     *
-     * This method should be called at the beginning of the application to set up
-     * necessary configurations and prepare for the execution of other features.
-     *
-     * @param context The application context to be used for initialization.
-     */
-    fun initialize(context: Context): Unit
 
     /**
      * Performs a test operation and returns a result as a String.
@@ -71,7 +60,7 @@ internal interface Messenger {
      * @param pushNotification The push notification data to be analyzed.
      * @return `true` if the push notification is related to DeskPro; `false` otherwise.
      */
-    fun isDeskProPushNotification(pushNotification: PushNotificationData): Boolean
+    fun isDeskProPushNotification(data: Map<String, String>): Boolean
 
     /**
      * Handles the incoming push notification data if it is related to DeskPro.
@@ -84,8 +73,9 @@ internal interface Messenger {
      *
      * @param pushNotification The push notification data to be handled.
      * @see isDeskProPushNotification
+     * @return `true` if the push notification is successfully handled; `false` otherwise.
      */
-    fun handlePushNotification(pushNotification: PushNotificationData): Unit
+    fun handlePushNotification(pushNotification: PushNotificationData): Boolean
 
     /**
      * Provides a [PresentBuilder] for constructing presentation paths within the application.

@@ -27,9 +27,9 @@ data class User(
         fun fromJson(json: String): User {
             return Json.decodeFromString(json)
         }
+    }
 
-        fun toJson(user: User): String {
-            return Json.encodeToString(user)
-        }
+    fun toJson(): String {
+        return Json.encodeToString(this)
     }
 }
