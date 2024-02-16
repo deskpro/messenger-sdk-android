@@ -147,7 +147,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 btnEvents -> {
                     MaterialAlertDialogBuilder(this@MainActivity)
                         .setTitle("Messenger app events")
-                        .setMessage(App.messenger?.getLogs()?.joinToString("\n\n"))
+                        .setMessage(App.messenger?.getLogs()?.filter { it.contains("AppEvent") }
+                            ?.joinToString("\n\n"))
                         .setPositiveButton(
                             "OK"
                         ) { _: DialogInterface?, _: Int -> }
@@ -181,14 +182,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun startDeskPro() {
-        App.messenger = DeskPro(
+        App.messenger = DeskPro(applicationContext,
             MessengerConfig(
                 appUrl = appUrl,
                 appId = appId,
                 appIcon = R.drawable.ic_launcher_foreground
             )
         )
-        App.messenger?.initialize(applicationContext)
         App.messenger?.enableLogging()
         App.messenger?.authorizeUser(jwtToken)
         App.messenger?.setPushRegistrationToken(fcmToken)
@@ -216,15 +216,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun onNotifyMePressed() {
         App.messenger ?: run {
-            App.messenger = DeskPro(
+            App.messenger = DeskPro(this,
                 MessengerConfig(
                     appUrl = appUrl,
                     appId = appId,
                     appIcon = R.drawable.ic_launcher_foreground
                 )
-            ).apply {
-                initialize(applicationContext)
-            }
+            )
         }
 
         App.messenger?.handlePushNotification(

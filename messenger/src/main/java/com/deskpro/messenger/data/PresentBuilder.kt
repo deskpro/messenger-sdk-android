@@ -1,8 +1,8 @@
 package com.deskpro.messenger.data
 
-import android.util.Log
-import com.deskpro.messenger.DeskProApp
+import android.content.Context
 import com.deskpro.messenger.ui.MessengerWebViewActivity
+import timber.log.Timber
 
 /**
  * Builder class for constructing URLs and presenting content in a WebView.
@@ -13,7 +13,7 @@ import com.deskpro.messenger.ui.MessengerWebViewActivity
  * @param url The base URL for constructing the path.
  * @param appId The application ID used for presentation.
  */
-class PresentBuilder(url: String, private val appId: String) {
+class PresentBuilder(private val context: Context?, url: String, private val appId: String) {
     /**
      * Represents the constructed path for the URL.
      */
@@ -51,6 +51,10 @@ class PresentBuilder(url: String, private val appId: String) {
         return this
     }
 
+    internal fun getPath(): String {
+        return path.toString()
+    }
+
     /**
      * Shows the WebView with the constructed path.
      *
@@ -58,12 +62,10 @@ class PresentBuilder(url: String, private val appId: String) {
      * Otherwise, the WebView is started with the constructed path and application ID.
      */
     fun show() {
-        if (DeskProApp.appContext == null) {
-            Log.d("PresentBuilder", "Context is null")
+        if (context == null) {
+            Timber.tag("DeskPro").d("Context is null")
             return
         }
-        DeskProApp.appContext?.let {
-            MessengerWebViewActivity.start(context = it, path = path.toString(), appId = appId)
-        }
+        MessengerWebViewActivity.start(context = context, path = path.toString(), appId = appId)
     }
 }
