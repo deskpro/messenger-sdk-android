@@ -27,8 +27,7 @@ open class DeskProSetupTest {
             appUrl = appUrl,
             appId = "",
         )
-        deskPro = DeskPro(messengerConfig)
-        deskPro.initialize(context)
+        deskPro = DeskPro(context, messengerConfig)
     }
 
     @Test
@@ -104,8 +103,7 @@ open class DeskProSetupTest {
         val jwtToken1 = "test_token_1"
         val fcmToken1 = "test_device_token_1"
 
-        val deskPro1 = DeskPro(messengerConfig1)
-        deskPro1.initialize(context)
+        val deskPro1 = DeskPro(context, messengerConfig1)
 
         deskPro1.setUserInfo(user1)
         deskPro1.authorizeUser(jwtToken1)
@@ -125,8 +123,7 @@ open class DeskProSetupTest {
         val jwtToken2 = "test_token_2"
         val fcmToken2 = "test_device_token_2"
 
-        val deskPro2 = DeskPro(messengerConfig2)
-        deskPro2.initialize(context)
+        val deskPro2 = DeskPro(context, messengerConfig2)
 
         deskPro2.setUserInfo(user2)
         deskPro2.authorizeUser(jwtToken2)
@@ -162,6 +159,7 @@ open class DeskProSetupTest {
     @Test
     fun testPresentBuilder() {
         val presentBuilder = PresentBuilder(
+            context,
             appUrl,
             "1"
         )

@@ -22,6 +22,8 @@ open class DeskProNotificationTest {
     private lateinit var context: Context
     private lateinit var messengerConfig: MessengerConfig
     private lateinit var deskPro: DeskPro
+    private lateinit var validPushData: PushNotificationData
+    private lateinit var invalidPushData: PushNotificationData
 
     @get:Rule
     val permissionRule: GrantPermissionApiRule = GrantPermissionApiRule.grant(
@@ -36,50 +38,33 @@ open class DeskProNotificationTest {
             appUrl = "https://dev-pr-13019.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d",
             appId = "",
         )
-        deskPro = DeskPro(messengerConfig)
-        deskPro.initialize(context)
-    }
+        deskPro = DeskPro(context, messengerConfig)
 
-    @Test
-    fun testValidPushNotification() {
-        deskPro.setPushRegistrationToken("123321")
-
-        val pushNotificationData = PushNotificationData(
+        validPushData = PushNotificationData(
             title = "Test Title",
             body = "Test Body",
             data = mapOf("issuer" to "deskpro-messenger")
         )
 
-        val dataValid = deskPro.isDeskProPushNotification(pushNotificationData.data)
+        invalidPushData = PushNotificationData(
+            title = "Test Title",
+            body = "Test Body",
+            data = mapOf("issuer" to "some-messenger")
+        )
+    }
+
+    @Test
+    fun testValidPushNotification() {
+        val dataValid = deskPro.isDeskProPushNotification(validPushData.data)
         Assert.assertTrue("❌The notification was not valid!❌", dataValid)
 
-        val success = deskPro.handlePushNotification(pushNotificationData)
+        val success = deskPro.handlePushNotification(validPushData)
         Assert.assertTrue("❌The notification was not sent successfully!❌", success)
     }
 
     @Test
-    fun testInvalidContextPushNotification() {
-        val deskProNotif = DeskPro(messengerConfig)
-
-        val pushNotificationData = PushNotificationData(
-            title = "Test Title",
-            body = "Test Body",
-            data = mapOf("issuer" to "some-messenger")
-        )
-
-        val success = deskProNotif.handlePushNotification(pushNotificationData)
-        Assert.assertFalse("❌The notification is send and it should not be!❌", success)
-    }
-
-    @Test
     fun testInvalidPushNotificationData() {
-        val pushNotificationData = PushNotificationData(
-            title = "Test Title",
-            body = "Test Body",
-            data = mapOf("issuer" to "some-messenger")
-        )
-
-        val success = deskPro.handlePushNotification(pushNotificationData)
+        val success = deskPro.handlePushNotification(invalidPushData)
         Assert.assertFalse("❌The notification is send and it should not be!❌", success)
     }
 

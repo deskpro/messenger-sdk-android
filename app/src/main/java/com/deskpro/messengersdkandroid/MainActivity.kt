@@ -181,14 +181,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun startDeskPro() {
-        App.messenger = DeskPro(
+        App.messenger = DeskPro(this,
             MessengerConfig(
                 appUrl = appUrl,
                 appId = appId,
                 appIcon = R.drawable.ic_launcher_foreground
             )
         )
-        App.messenger?.initialize(applicationContext)
         App.messenger?.enableLogging()
         App.messenger?.authorizeUser(jwtToken)
         App.messenger?.setPushRegistrationToken(fcmToken)
@@ -216,15 +215,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun onNotifyMePressed() {
         App.messenger ?: run {
-            App.messenger = DeskPro(
+            App.messenger = DeskPro(this,
                 MessengerConfig(
                     appUrl = appUrl,
                     appId = appId,
                     appIcon = R.drawable.ic_launcher_foreground
                 )
-            ).apply {
-                initialize(applicationContext)
-            }
+            )
         }
 
         App.messenger?.handlePushNotification(

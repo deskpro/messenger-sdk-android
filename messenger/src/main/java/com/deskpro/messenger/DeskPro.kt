@@ -3,7 +3,6 @@ package com.deskpro.messenger
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.util.Log
 import androidx.core.content.ContextCompat
 import com.deskpro.messenger.data.LogCollector
 import com.deskpro.messenger.data.Messenger
@@ -21,31 +20,25 @@ import timber.log.Timber
  * The `DeskPro` class provides methods for initializing the Messenger, managing user information,
  * handling push notifications, and presenting the DeskPro messaging interface.
  *
+ * @param appContext The application context to be used for initializing the DeskPro.
  * @param messengerConfig The configuration object containing settings for the DeskPro Messenger.
  */
-class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
+class DeskPro(private val appContext: Context, private val messengerConfig: MessengerConfig) : Messenger {
 
     /**
      * Preferences manager for storing user-related information.
      */
     private var prefs: Prefs? = null
 
+    /**
+     * Notification helper class for handling push notifications.
+     */
     private var notificationHelper: NotificationHelper? = null
 
-    /**
-     * Initializes the functionality of the application.
-     *
-     * This method should be called at the beginning of the application to set up
-     * necessary configurations and prepare for the execution of other features.
-     *
-     * @param context The application context to be used for initialization.
-     */
-    override fun initialize(context: Context) {
-        DeskProApp.appContext = context
-        DeskProApp.appIcon = messengerConfig.appIcon
-        prefs = Prefs(context, messengerConfig.appId)
-        notificationHelper = NotificationHelper(context)
-        Log.d(TAG, "Initialized")
+    init {
+        prefs = Prefs(appContext, messengerConfig.appId)
+        notificationHelper = NotificationHelper(appContext)
+        Timber.tag(TAG).d("Initialized")
     }
 
     /**
@@ -165,13 +158,8 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
             return false
         }
 
-        if (DeskProApp.appContext == null) {
-            Timber.tag(TAG).d("Context is null")
-            return false
-        }
-
         if (ContextCompat.checkSelfPermission(
-                DeskProApp.appContext!!,
+                appContext,
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
@@ -209,7 +197,7 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
         val url = with(messengerConfig) {
             this.appUrl.plus(this.appId)
         }
-        return PresentBuilder(url, messengerConfig.appId)
+        return PresentBuilder(appContext, url, messengerConfig.appId)
     }
 
     /**
@@ -220,7 +208,7 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
      */
     override fun close() {
         //TODO Not yet implemented
-        Log.d(TAG, prefs?.getUserInfo()?.name ?: "")
+        Timber.tag(TAG).d(prefs?.getUserInfo()?.name ?: "")
     }
 
     /**
@@ -242,7 +230,7 @@ class DeskPro(private val messengerConfig: MessengerConfig) : Messenger {
      * logged for debugging and troubleshooting purposes.
      */
     override fun enableLogging() {
-        DeskProApp.setCollector()
+        LogCollector.plantTree()
     }
 
     override fun getLogs(): List<String> {

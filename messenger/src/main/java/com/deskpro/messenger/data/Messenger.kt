@@ -3,15 +3,6 @@ package com.deskpro.messenger.data
 import android.content.Context
 
 internal interface Messenger {
-    /**
-     * Initializes the functionality of the application.
-     *
-     * This method should be called at the beginning of the application to set up
-     * necessary configurations and prepare for the execution of other features.
-     *
-     * @param context The application context to be used for initialization.
-     */
-    fun initialize(context: Context): Unit
 
     /**
      * Performs a test operation and returns a result as a String.
