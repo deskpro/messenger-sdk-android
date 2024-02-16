@@ -28,16 +28,14 @@ class DeskPro(private val appContext: Context, private val messengerConfig: Mess
     /**
      * Preferences manager for storing user-related information.
      */
-    private var prefs: Prefs? = null
+    private var prefs: Prefs = Prefs(appContext, messengerConfig.appId)
 
     /**
      * Notification helper class for handling push notifications.
      */
-    private var notificationHelper: NotificationHelper? = null
+    private var notificationHelper: NotificationHelper = NotificationHelper(appContext)
 
     init {
-        prefs = Prefs(appContext, messengerConfig.appId)
-        notificationHelper = NotificationHelper(appContext)
         Timber.tag(TAG).d("Initialized")
     }
 
@@ -63,14 +61,14 @@ class DeskPro(private val appContext: Context, private val messengerConfig: Mess
      */
     override fun setUserInfo(user: User) {
         //TODO Not yet implemented
-        prefs?.setUserInfo(user)
+        prefs.setUserInfo(user)
     }
 
     /**
      * Getter method for user info, should only be used for testing.
      */
     internal fun getUserInfo(): User? {
-        return prefs?.getUserInfo()
+        return prefs.getUserInfo()
     }
 
     /**
@@ -80,7 +78,7 @@ class DeskPro(private val appContext: Context, private val messengerConfig: Mess
      * @return `true` if the token is successfully saved, `false` otherwise.
      */
     override fun authorizeUser(userJwt: String): Boolean {
-        prefs?.setJwtToken(userJwt)
+        prefs.setJwtToken(userJwt)
         return true
     }
 
@@ -88,7 +86,7 @@ class DeskPro(private val appContext: Context, private val messengerConfig: Mess
      * Getter method for JWT token, should only be used for testing.
      */
     internal fun getJwtToken(): String? {
-        return prefs?.getJwtToken()
+        return prefs.getJwtToken()
     }
 
     /**
@@ -101,7 +99,7 @@ class DeskPro(private val appContext: Context, private val messengerConfig: Mess
      */
     override fun forgetUser(): Boolean {
         //TODO Not yet implemented
-        prefs?.clear()
+        prefs.clear()
         return true
     }
 
@@ -115,7 +113,7 @@ class DeskPro(private val appContext: Context, private val messengerConfig: Mess
      * @return `true` if the push registration token is successfully set; `false` otherwise.
      */
     override fun setPushRegistrationToken(token: String): Boolean {
-        prefs?.setFCMToken(token)
+        prefs.setFCMToken(token)
         return true
     }
 
@@ -123,7 +121,7 @@ class DeskPro(private val appContext: Context, private val messengerConfig: Mess
      * Getter method for FCM token, should only be used for testing.
      */
     internal fun getPushRegistrationToken(): String? {
-        return prefs?.getFCMToken()
+        return prefs.getFCMToken()
     }
 
     /**
@@ -167,7 +165,7 @@ class DeskPro(private val appContext: Context, private val messengerConfig: Mess
             return false
         }
 
-        notificationHelper?.showNotification(
+        notificationHelper.showNotification(
             title = pushNotification.title,
             body = pushNotification.body,
             icon = messengerConfig.appIcon,
@@ -208,7 +206,7 @@ class DeskPro(private val appContext: Context, private val messengerConfig: Mess
      */
     override fun close() {
         //TODO Not yet implemented
-        Timber.tag(TAG).d(prefs?.getUserInfo()?.name ?: "")
+        Timber.tag(TAG).d(prefs.getUserInfo()?.name ?: "")
     }
 
     /**
