@@ -1,6 +1,8 @@
 package com.deskpro.messengersdkandroid
 
 import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Build
@@ -20,6 +22,7 @@ import com.deskpro.messenger.data.PushNotificationData
 import com.deskpro.messenger.data.User
 import com.deskpro.messengersdkandroid.databinding.ActivityMainBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
@@ -39,7 +42,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMainBinding
 
 
-    private var appUrl = "https://dev-pr-12730.earthly.deskprodemo.com/deskpro-messenger/deskpro/1/d"
+    private var appUrl = "https://master.earthly.deskprodemo.com/deskpro-messenger/00000000-0000-0000-0000-000000000000/1/%7B%22platform%22%3A%22ANDROID%22%7D"
     private var appId = ""
     private var jwtToken = ""
     private var fcmToken = ""
@@ -52,6 +55,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             "}"
 
     private val stringBuilder = StringBuilder()
+
+    private val clipboardManager: ClipboardManager by lazy { getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
 
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
         if (isGranted) {
@@ -158,6 +163,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 btnNotifyMe -> {
                     onNotifyMePressed()
                 }
+
+                btnCopyLogs -> {
+                    clipboardManager.setPrimaryClip(
+                        ClipData.newPlainText(
+                            "",
+                            (tvLogs as MaterialTextView).text.toString()
+                        )
+                    )
+                    showCopySuccessfulMessage()
+                }
+                btnCopyFcmToken -> {
+                    clipboardManager.setPrimaryClip(
+                        ClipData.newPlainText(
+                            "", fcmToken
+                        )
+                    )
+                    showCopySuccessfulMessage()
+                }
             }
         }
     }
@@ -171,6 +194,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.btnOpenMessenger.setOnClickListener(this)
         binding.btnEvents.setOnClickListener(this)
         binding.btnNotifyMe.setOnClickListener(this)
+        binding.btnCopyLogs.setOnClickListener(this)
+        binding.btnCopyFcmToken.setOnClickListener(this)
 
         FirebaseMessaging.getInstance().token
             .addOnSuccessListener { result ->
@@ -232,6 +257,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 mapOf("issuer" to "deskpro-messenger", "category" to "new-message")
             )
         )
+    }
+
+    private fun showCopySuccessfulMessage() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            Toast.makeText(
+                this@MainActivity,
+                getString(R.string.copy_successful_message),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     companion object {

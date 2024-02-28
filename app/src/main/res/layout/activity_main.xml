@@ -42,9 +42,8 @@
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etJWT"
         android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="8dp"
         android:hint="@string/enter_jtw_token"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,8 +53,7 @@
         android:id="@+id/etUserInfo"
         android:layout_width="0dp"
         android:layout_height="150dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
         android:hint="@string/user_info_json"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,10 +63,9 @@
         android:id="@+id/btnNotifications"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:text="@string/enable_notifications"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/etUserInfo"
         app:layout_constraintTop_toBottomOf="@+id/etUserInfo" />
 
     <View
@@ -85,26 +82,24 @@
         android:id="@+id/btnOpenMessenger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:text="@string/open_messenger"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/btnNotifications"
         app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
     <Button
         android:id="@+id/btnEvents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
         android:text="@string/events"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/btnNotifyMe"
         app:layout_constraintTop_toTopOf="@+id/btnOpenMessenger" />
 
     <View
         android:id="@+id/divider2"
         android:layout_width="match_parent"
         android:layout_height="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:background="@color/secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -115,7 +110,6 @@
         android:id="@+id/tvLogs"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:hint="@string/logs"
@@ -131,9 +125,40 @@
         android:id="@+id/btnNotifyMe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
         android:text="@string/notify_me"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnCopyFcmToken"
+        app:layout_constraintStart_toEndOf="@+id/btnNotifications"
         app:layout_constraintTop_toTopOf="@+id/btnNotifications" />
+
+    <ImageView
+        android:id="@+id/btnCopyLogs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:backgroundTint="@color/primary"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="4dp"
+        android:translationZ="90dp"
+        app:layout_constraintEnd_toEndOf="@+id/divider2"
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        app:srcCompat="@drawable/ic_content_copy"
+        app:tint="@color/primary" />
+
+    <ImageView
+        android:id="@+id/btnCopyFcmToken"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:backgroundTint="@color/primary"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="4dp"
+        android:translationZ="90dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnNotifyMe"
+        app:layout_constraintEnd_toEndOf="@+id/divider1"
+        app:layout_constraintTop_toTopOf="@+id/btnNotifyMe"
+        app:srcCompat="@drawable/ic_content_copy"
+        app:tint="@color/primary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
