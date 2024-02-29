@@ -76,3 +76,4 @@ jobs:
       with:
         # Path to SARIF file relative to the root of the repository
         sarif_file: "/home/runner/work/messenger-sdk-android/results/java.sarif"
+        category: deskpro-analysis-tool
