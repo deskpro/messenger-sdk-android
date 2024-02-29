@@ -58,7 +58,7 @@ internal object EvaluateScriptsUtil {
         window.DESKPRO_MESSENGER_OPTIONS = {
             showLauncherButton: false,
             openOnInit: true,
-            userInfo: { name: "john" },
+            userInfo: $WEB_INTERFACE_KEY.getUserInfo(),
             signedUserInfo: undefined,
             launcherButtonConfig: undefined,
             messengerAppConfig: undefined,
@@ -74,7 +74,7 @@ internal object EvaluateScriptsUtil {
             ready: async (messengerId) => {
              const data = await window.DESKPRO_MESSENGER_CONNECTION.childMethods?.init(messengerId, {
               showLauncherButton: DESKPRO_MESSENGER_OPTIONS.showLauncherButton,
-              user: window.DESKPRO_MESSENGER_OPTIONS?.userInfo,
+              userInfo: window.DESKPRO_MESSENGER_OPTIONS?.userInfo,
               launcherButtonConfig: DESKPRO_MESSENGER_OPTIONS.launcherButtonConfig,
               messengerAppConfig: DESKPRO_MESSENGER_OPTIONS.messengerAppConfig,
               parentViewHeight: "fullscreen",
@@ -94,10 +94,7 @@ internal object EvaluateScriptsUtil {
             getViewHeight: async (messengerId) => {
              return "fullscreen";
             },
-            getUserInfo: async (messengerId) => {
-              return $WEB_INTERFACE_KEY.getUserInfo();
-            },
-            getUserJwtToken: async (messengerId) => {
+            getSignedUserInfo: async (messengerId) => {
               return $WEB_INTERFACE_KEY.getJwtToken();
             },
             open: async (messengerId, data) => {
