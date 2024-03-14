@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMainBinding
 
 
-    private var appUrl = "https://master.earthly.deskprodemo.com/deskpro-messenger/00000000-0000-0000-0000-000000000000/1/%7B%22platform%22%3A%22ANDROID%22%7D"
+    private var appUrl = "https://master.earthly.deskprodemo.com/deskpro-messenger/00000000-0000-0000-0000-000000000000/0000000000VVF1PQ6182F3NTS5/%7B%22platform%22%3A%22ANDROID%22%7D"
     private var appId = ""
     private var jwtToken = ""
     private var fcmToken = ""

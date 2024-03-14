@@ -19,7 +19,7 @@ internal object EvaluateScriptsUtil {
                 user: window.DESKPRO_MESSENGER_OPTIONS?.userInfo,
                 launcherButtonConfig: undefined,
                 messengerAppConfig: undefined,
-                parentViewHeight: "fullscreen",
+                parentViewDimensions: "fullscreen",
               });
 
               if (data) {
@@ -35,7 +35,7 @@ internal object EvaluateScriptsUtil {
               // setViewportSize({ width, height });
               androidApp.close();
             },
-            getViewHeight: async () => {
+            getViewDimensions: async () => {
               return 'fullscreen';
             },
           },
@@ -47,7 +47,7 @@ internal object EvaluateScriptsUtil {
     fun openScript(): String {
         return """
         window.DESKPRO_MESSENGER_CONNECTION.childMethods.open("1", {
-          parentViewHeight: 'fullscreen',
+          parentViewDimensions: 'fullscreen',
           showLauncherButton: false,
         });
     """
@@ -77,7 +77,7 @@ internal object EvaluateScriptsUtil {
               userInfo: window.DESKPRO_MESSENGER_OPTIONS?.userInfo,
               launcherButtonConfig: DESKPRO_MESSENGER_OPTIONS.launcherButtonConfig,
               messengerAppConfig: DESKPRO_MESSENGER_OPTIONS.messengerAppConfig,
-              parentViewHeight: "fullscreen",
+              parentViewDimensions: "fullscreen",
               open: DESKPRO_MESSENGER_OPTIONS.openOnInit,
              });
         
@@ -91,7 +91,7 @@ internal object EvaluateScriptsUtil {
                 token: fcmToken
              });
             },
-            getViewHeight: async (messengerId) => {
+            getViewDimensions: async (messengerId) => {
              return "fullscreen";
             },
             getSignedUserInfo: async (messengerId) => {
@@ -101,7 +101,7 @@ internal object EvaluateScriptsUtil {
               const { width, height } = data;
             },
             close: async (messengerId, data) => {
-              $WEB_INTERFACE_KEY.close();
+              const result = await $WEB_INTERFACE_KEY.close();
             },
             appEvent: async (messengerId, event) => {
               var jsonEvent = JSON.stringify(event);
@@ -115,5 +115,11 @@ internal object EvaluateScriptsUtil {
 
     fun initAndOpenScript(): String {
         return optionsScript() + connectionScript()
+    }
+
+    fun logoutScript(): String {
+        return """
+      window.DESKPRO_MESSENGER_CONNECTION.childMethods.logout(messengerId);
+      """
     }
 }
