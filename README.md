@@ -91,7 +91,7 @@ messenger.authorizeUser(jwtToken)
 ```
 messenger.setPushRegistrationToken(fcmToken)
 ```
-Prerequisite: The application should be connected to the notifications platform, enabled for receiving notifications and obtaining tokens.
+Prerequisite: The application should be connected to the notifications platform, enabled for receiving notifications and obtaining FCM tokens.
 
 ## Versioning
 
