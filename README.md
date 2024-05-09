@@ -42,7 +42,7 @@ dependencies {
 
 ## Manual installation
 
-[Download](https://jitpack.io/com/github/deskpro/messenger-sdk-android/0.0.3/messenger-sdk-android-0.0.3.aar) latest .aar file
+[Download](https://jitpack.io/com/github/deskpro/messenger-sdk-android/0.0.4/messenger-sdk-android-0.0.4.aar) latest .aar file
 
 - Open the build.gradle file for the app module and add the following lines:
 
@@ -60,13 +60,13 @@ dependencies {
 }
 ```
 
-## Initialization
+## Initialization (Kotlin)
 
 ```
 val messengerConfig =
-    MessengerConfig(appUrl: "YOUR_APP_URL", appId: "YOUR_APP_ID")
+    MessengerConfig(appUrl: "APP_URL", appId: "APP_ID", appKey: "APP_KEY", appIcon: "APP_ICON")
 ```
-Replace `YOUR_APP_URL` and `YOUR_APP_ID` with your app's URL and ID.
+Replace `APP_URL`, `APP_ID`, `APP_KEY` and `APP_ICON` with your app's URL, ID, KEY and drawable resource.
 ```
 val messenger = DeskPro(applicationContext, messengerConfig)
 ```
@@ -74,6 +74,22 @@ To open a Messenger, paste this line example in the desired place:
 ```
 messenger.present().show()
 ```
+
+## Initialization (Java)
+
+```
+MessengerConfig messengerConfig =
+    MessengerConfig(appUrl: "APP_URL", appId: "APP_ID", appKey: "APP_KEY", appIcon: "APP_ICON")
+```
+Replace `APP_URL`, `APP_ID`, `APP_KEY` and `APP_ICON` with your app's URL, ID, KEY and drawable resource.
+```
+DeskPro messenger = DeskPro(getApplicationContext(), messengerConfig)
+```
+To open a Messenger, paste this line example in the desired place:
+```
+messenger.present().show()
+```
+
 Note: You can create multiple Messenger instances.
 
 ### Setting user info
