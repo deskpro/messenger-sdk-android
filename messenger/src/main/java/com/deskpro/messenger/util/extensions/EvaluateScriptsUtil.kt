@@ -9,53 +9,9 @@ import com.deskpro.messenger.util.Constants.WEB_INTERFACE_KEY
  * opening the Messenger, and handling various events.
  */
 internal object EvaluateScriptsUtil {
-    fun initScript(): String {
-        return """
-        window.DESKPRO_MESSENGER_CONNECTION = {
-          parentMethods: {
-            ready: async () => {
-              const data = await window.DESKPRO_MESSENGER_CONNECTION.childMethods?.init("1", {
-                showLauncherButton: false,
-                user: window.DESKPRO_MESSENGER_OPTIONS?.userInfo,
-                launcherButtonConfig: undefined,
-                messengerAppConfig: undefined,
-                parentViewDimensions: "fullscreen",
-              });
-
-              if (data) {
-                const { side, offsetBottom, offsetSide, width, height } = data;
-                // setViewportPosition({ side, offsetBottom, offsetSide });
-                // setViewportSize({ width, height });
-              }
-            },
-            open: async () => {
-              // setViewportSize({ width, height });
-            },
-            close: async () => {
-              // setViewportSize({ width, height });
-              androidApp.close();
-            },
-            getViewDimensions: async () => {
-              return 'fullscreen';
-            },
-          },
-          childMethods: undefined,
-        };
-    """
-    }
-
-    fun openScript(): String {
-        return """
-        window.DESKPRO_MESSENGER_CONNECTION.childMethods.open("1", {
-          parentViewDimensions: 'fullscreen',
-          showLauncherButton: false,
-        });
-    """
-    }
-
     private fun optionsScript(): String {
         return """
-        window.DESKPRO_MESSENGER_OPTIONS = {
+        window.DpMessengerOptions = {
             showLauncherButton: false,
             openOnInit: true,
             userInfo: $WEB_INTERFACE_KEY.getUserInfo(),
@@ -69,16 +25,16 @@ internal object EvaluateScriptsUtil {
 
     private fun connectionScript(): String {
         return """ 
-        window.DESKPRO_MESSENGER_CONNECTION = {
+        window.DpMessengerConnection = {
            parentMethods: {
             ready: async (messengerId) => {
-             const data = await window.DESKPRO_MESSENGER_CONNECTION.childMethods?.init(messengerId, {
-              showLauncherButton: DESKPRO_MESSENGER_OPTIONS.showLauncherButton,
-              userInfo: window.DESKPRO_MESSENGER_OPTIONS?.userInfo,
-              launcherButtonConfig: DESKPRO_MESSENGER_OPTIONS.launcherButtonConfig,
-              messengerAppConfig: DESKPRO_MESSENGER_OPTIONS.messengerAppConfig,
+             const data = await window.DpMessengerConnection.childMethods?.init(messengerId, {
+              showLauncherButton: DpMessengerOptions.showLauncherButton,
+              userInfo: window.DpMessengerOptions?.userInfo,
+              launcherButtonConfig: DpMessengerOptions.launcherButtonConfig,
+              messengerAppConfig: DpMessengerOptions.messengerAppConfig,
               parentViewDimensions: "fullscreen",
-              open: DESKPRO_MESSENGER_OPTIONS.openOnInit,
+              open: DpMessengerOptions.openOnInit,
              });
         
              if (data) {
@@ -87,7 +43,7 @@ internal object EvaluateScriptsUtil {
              
              const fcmToken = await $WEB_INTERFACE_KEY.getFcmToken();
              
-             window.DESKPRO_MESSENGER_CONNECTION.childMethods?.setDeviceToken(messengerId, {
+             window.DpMessengerConnection.childMethods?.setDeviceToken(messengerId, {
                 token: fcmToken
              });
             },
@@ -119,7 +75,7 @@ internal object EvaluateScriptsUtil {
 
     fun logoutScript(): String {
         return """
-      window.DESKPRO_MESSENGER_CONNECTION.childMethods.logout(messengerId);
+      window.DpMessengerConnection.childMethods.logout(messengerId);
       """
     }
 }

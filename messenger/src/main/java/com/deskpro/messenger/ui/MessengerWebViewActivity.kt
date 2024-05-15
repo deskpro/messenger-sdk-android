@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.webkit.CookieManager
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -62,6 +63,8 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
         binding = ActivityMessengerWebViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        clearCookies()
+
         val url = extractUrl(intent)
         val appId = extractAppId(intent)
         prefs = Prefs(this, appId)
@@ -91,8 +94,8 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
                     view: WebView?,
                     request: WebResourceRequest?
                 ): Boolean {
-                    Uri.parse(request?.url.toString())
-                    return false
+                    view?.context?.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(request?.url.toString())))
+                    return true
                 }
 
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -180,5 +183,10 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
                 .putExtra(Constants.WEB_URL, path)
                 .putExtra(Constants.APP_ID, appId)
         }
+    }
+
+    private fun clearCookies() {
+        CookieManager.getInstance().removeAllCookies(null)
+        CookieManager.getInstance().flush()
     }
 }
