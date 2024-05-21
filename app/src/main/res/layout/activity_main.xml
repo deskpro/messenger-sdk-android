@@ -30,24 +30,21 @@
         android:id="@+id/etAppId"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
         android:hint="@string/enter_app_id"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/etUrl"
-        app:layout_constraintTop_toBottomOf="@+id/header_title"
-        app:layout_constraintWidth_percent="0.34" />
+        app:layout_constraintEnd_toEndOf="@+id/etUrl"
+        app:layout_constraintStart_toStartOf="@+id/etUrl"
+        app:layout_constraintTop_toBottomOf="@+id/etUrl" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etJWT"
         android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="@string/enter_jtw_token"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etUrl" />
+        app:layout_constraintTop_toBottomOf="@+id/etAppId" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etUserInfo"

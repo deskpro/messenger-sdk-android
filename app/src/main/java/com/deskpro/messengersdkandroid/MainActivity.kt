@@ -42,8 +42,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMainBinding
 
 
-    private var appUrl = "https://master.earthly.deskprodemo.com/deskpro-messenger/00000000-0000-0000-0000-000000000000/0000000000VVF1PQ6182F3NTS5/%7B%22platform%22%3A%22ANDROID%22%7D"
-    private var appId = ""
+    private var appUrl = "https://master.earthly.deskprodemo.com/deskpro-messenger/00000000-0000-0000-0000-000000000000"
+    private var appId = "/0000000000VVF1PQ6182F3NTS5"
     private var jwtToken = ""
     private var fcmToken = ""
     private var user: User? = null
@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         initListeners()
 
         binding.etUrl.setText(appUrl)
+        binding.etAppId.setText(appId)
         binding.etUserInfo.setText(userInfo)
         binding.tvLogs.movementMethod = ScrollingMovementMethod()
 

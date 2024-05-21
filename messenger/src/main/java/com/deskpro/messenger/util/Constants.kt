@@ -32,4 +32,9 @@ internal object Constants {
      * Path to the error page within the Android assets.
      */
     const val ERROR_PAGE_PATH = "file:///android_asset/error_page.html"
+
+    /**
+     * Represents the platform identifier for the Android platform.
+     */
+    const val ANDROID = "ANDROID"
 }
