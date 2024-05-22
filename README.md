@@ -42,7 +42,7 @@ dependencies {
 
 ## Manual installation
 
-[Download](https://jitpack.io/com/github/deskpro/messenger-sdk-android/0.0.3/messenger-sdk-android-0.0.3.aar) latest .aar file
+[Download](https://jitpack.io/com/github/deskpro/messenger-sdk-android/0.0.6/messenger-sdk-android-0.0.6.aar) latest .aar file
 
 - Open the build.gradle file for the app module and add the following lines:
 

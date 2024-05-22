@@ -10,9 +10,12 @@ import com.deskpro.messenger.data.MessengerConfig
 import com.deskpro.messenger.data.PresentBuilder
 import com.deskpro.messenger.data.PushNotificationData
 import com.deskpro.messenger.data.User
+import com.deskpro.messenger.util.Constants
 import com.deskpro.messenger.util.NotificationHelper
 import com.deskpro.messenger.util.Prefs
+import org.json.JSONObject
 import timber.log.Timber
+import java.net.URLEncoder
 
 /**
  * Implementation of the [Messenger] interface for interacting with DeskPro messaging functionality.
@@ -193,7 +196,7 @@ class DeskPro(private val appContext: Context, private val messengerConfig: Mess
      */
     override fun present(): PresentBuilder {
         val url = with(messengerConfig) {
-            this.appUrl.plus(this.appId)
+            buildUrl(this.appUrl, this.appId)
         }
         return PresentBuilder(appContext, url, messengerConfig.appId)
     }
@@ -237,5 +240,13 @@ class DeskPro(private val appContext: Context, private val messengerConfig: Mess
 
     companion object {
         private const val TAG = "DeskPro"
+    }
+
+    private fun buildUrl(baseUrl: String, appId: String): String {
+        val encodedPlatform = URLEncoder.encode(JSONObject(mapOf("platform" to Constants.ANDROID)).toString(), "UTF-8")
+        val formattedBaseUrl = baseUrl.trimEnd('/')
+        val formattedAppId = "/" + appId.trim('/')
+
+        return "$formattedBaseUrl/$formattedAppId/$encodedPlatform"
     }
 }

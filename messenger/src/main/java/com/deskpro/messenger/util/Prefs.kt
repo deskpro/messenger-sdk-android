@@ -40,7 +40,7 @@ internal class Prefs(context: Context, appId: String) {
      * Lazy-initialized SharedPreferences instance.
      */
     private val prefs: SharedPreferences by lazy {
-        context.getSharedPreferences("$PREFS_NAME-$appId", 0)
+        context.getSharedPreferences("$PREFS_NAME-${appId.trim('/')}", 0)
     }
 
     /**
