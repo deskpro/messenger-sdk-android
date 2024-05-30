@@ -79,9 +79,9 @@ messenger.present().show()
 
 ```
 MessengerConfig messengerConfig =
-    MessengerConfig(appUrl: "APP_URL", appId: "APP_ID", appKey: "APP_KEY", appIcon: "APP_ICON")
+    MessengerConfig("APP_URL", "APP_ID", "APP_KEY", "APP_ICON")
 ```
-Replace `APP_URL`, `APP_ID`, `APP_KEY` and `APP_ICON` with your app's URL, ID, KEY and drawable resource.
+Replace `APP_URL`, `APP_ID`, `APP_KEY` and `APP_ICON` with your app's URL, ID, KEY and drawable resource. If there is no value for `APP_KEY`, put `null`.
 ```
 DeskPro messenger = DeskPro(getApplicationContext(), messengerConfig)
 ```
