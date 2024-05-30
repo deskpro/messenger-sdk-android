@@ -79,15 +79,15 @@ messenger.present().show()
 
 ```
 MessengerConfig messengerConfig =
-    MessengerConfig("APP_URL", "APP_ID", "APP_KEY", "APP_ICON")
+    new MessengerConfig("APP_URL", "APP_ID", "APP_KEY", "APP_ICON");
 ```
 Replace `APP_URL`, `APP_ID`, `APP_KEY` and `APP_ICON` with your app's URL, ID, KEY and drawable resource. If there is no value for `APP_KEY`, put `null`.
 ```
-DeskPro messenger = new DeskPro(getApplicationContext(), messengerConfig)
+DeskPro messenger = new DeskPro(getApplicationContext(), messengerConfig);
 ```
 To open a Messenger, paste this line example in the desired place:
 ```
-messenger.present().show()
+messenger.present().show();
 ```
 
 Note: You can create multiple Messenger instances.
