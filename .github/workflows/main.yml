@@ -35,9 +35,6 @@ jobs:
         script: ./gradlew :messenger:connectedAndroidTest
 
     - name: Gradle Build and Test
-      uses: eskatos/gradle-command-action@v1.3.3
+      uses: gradle/gradle-build-action@v2
       with:
-        wrapper-cache-enabled: true
-        dependencies-cache-enabled: true
-        configuration-cache-enabled: true
         arguments: clean assembleDebug testDebugUnitTest --info --stacktrace
