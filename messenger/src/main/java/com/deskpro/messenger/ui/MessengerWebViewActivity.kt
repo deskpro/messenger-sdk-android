@@ -24,6 +24,8 @@ import com.deskpro.messenger.util.extensions.EvaluateScriptsUtil.initAndOpenScri
 import com.deskpro.messenger.util.extensions.extractAppId
 import com.deskpro.messenger.util.extensions.extractUrl
 import timber.log.Timber
+import java.net.MalformedURLException
+import java.net.URL
 
 /**
  * Activity hosting the WebView for DeskPro Messenger functionality.
@@ -115,8 +117,16 @@ internal class MessengerWebViewActivity : AppCompatActivity() {
                     error: WebResourceError?
                 ) {
                     super.onReceivedError(view, request, error)
-                    binding.progressBar.visibility = View.GONE
-                    loadErrorHtmlPage()
+                    // Only redirect to error page if the error came from the Messenger domain
+                    try {
+                        if (URL(url).host == request?.url?.host) {
+                            binding.progressBar.visibility = View.GONE
+                            loadErrorHtmlPage()
+                        }
+                    } catch (e: MalformedURLException) {
+                        // If url is malformed then Messenger has failed to load
+                        loadErrorHtmlPage()
+                    }
                 }
             }
         }
