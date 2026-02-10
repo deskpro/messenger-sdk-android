@@ -27,7 +27,7 @@ jobs:
       run: chmod +x ./gradlew
 
     - name: Run android tests
-      uses: reactivecircus/android-emulator-runner@v2
+      uses: reactivecircus/android-emulator-runner@b530d96654c385303d652368551fb075bc2f0b6b # v2
       with:
         api-level: 29
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
@@ -35,6 +35,6 @@ jobs:
         script: ./gradlew :messenger:connectedAndroidTest
 
     - name: Gradle Build and Test
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@a8f75513eafdebd8141bd1cd4e30fcd194af8dfa # v2.12.0
       with:
         arguments: clean assembleDebug testDebugUnitTest --info --stacktrace
